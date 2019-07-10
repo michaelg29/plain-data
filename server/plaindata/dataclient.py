@@ -5,4 +5,5 @@ from mundusinvicte.networking.sockets.TcpClient import TcpClient
 
 class DataClient(TcpClient):
     def __init__(self, socket, addr):
-        self.__super__(socket, addr)
+        super().__init__(socket, addr)
+        self.validated = False
