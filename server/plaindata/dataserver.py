@@ -2,6 +2,7 @@ import sys
 sys.path.append(r"C:\src\business-library\python")
 
 import json
+import pyaes
 
 from .dataclient import DataClient
 from .request import Request
@@ -61,9 +62,10 @@ class DataServer(TcpListener):
         response = json.loads(client.sock.recv(16384).decode('utf_8'))
 
         try:
-            client.key = rsa.decrypt_(self.__privKey, response['shared_key'])
-            dec = aes.decrypt(client.key, response['enc_msg'], True)
-            client.send(dec, False)
+            client.key = rsa.decrypt_(self.__privKey, response['shared_key']).encode('utf8')
+            client.aes = pyaes.AESModeOfOperationCTR(client.key)
+
+            client.send(client.aes.decrypt(response['enc_msg']), False)
         except Exception as e:
             print(e)
             self.clientFailedValidation(client)
