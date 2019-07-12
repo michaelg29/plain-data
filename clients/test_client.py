@@ -7,7 +7,6 @@ import mundusinvicte.security.aes as aes
 import pyaes
 import socket
 import json
-from base64 import b64encode
 
 TCP_IP = '127.0.0.1'
 TCP_PORT = 5500
@@ -52,15 +51,31 @@ else:
     print("Insecure connection, terminating")
     sys.exit()
 
-while (True):
-    msg = input()
-
-    if msg == "stop":
-        break
-
-    enc = aes_.encrypt(msg).decode('latin1')
+try:
+    contents = open("C:\\Users\\Michael Grieco\\Downloads\\error_func.pdf", "rb").read()
 
     send = {
-        "message": enc
+        "type": "upload-file",
+        "filetype": "pdf",
+        "filename": "error_func.pdf",
+        "author": "Michael Grieco",
+        "contents": contents.decode('latin1'),
     }
-    s.send(json.dumps(send).encode('utf8'))
+
+    send_s = aes_.encrypt(json.dumps(send)).decode('latin1')
+    s.send(send_s.encode('utf8'))
+except Exception as e:
+    print(e)
+
+# while (True):
+#     msg = input()
+
+#     if msg == "stop":
+#         break
+
+#     enc = aes_.encrypt(msg).decode('latin1')
+
+#     send = {
+#         "message": enc
+#     }
+#     s.send(json.dumps(send).encode('utf8'))
