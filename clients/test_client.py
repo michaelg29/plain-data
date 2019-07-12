@@ -16,16 +16,41 @@ MESSAGE = "Hello, World!"
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 s.connect((TCP_IP, TCP_PORT))
 
+def sendMsg(msg):
+    send_b = msg.encode('utf8')
+    size = len(send_b)
+    i = 0
+    
+    while i < size:
+        if i > size - 8192:
+            break
+        s.send(send_b[i:i + 8192])
+        i += 8192
+
+    s.send(send_b[i:])
+    s.send("finished".encode('utf8'))
+
+def recv():
+    msg = ""
+    while True:
+        data = s.recv(8192).decode()
+        if data[-8:] == "finished":
+            msg += data[:-8]
+            break
+        msg += data
+
+    return msg
+
 # send hello message
 response = {
     "name": "Michael",
     "platform": "win32"
 }
 
-s.send(bytes(json.dumps(response), 'UTF-8'))
+sendMsg(json.dumps(response))
 
 # receive public key
-response = json.loads(s.recv(8192).decode('utf_8'))
+response = json.loads(recv())
 rsa_key = (response['e'], response['N'])
 
 # generate aes key
@@ -39,12 +64,12 @@ response = {
     "enc_msg": enc_msg.decode('latin1')
 }
 
-s.send(json.dumps(response).encode('utf_8'))
+sendMsg(json.dumps(response))
 
 # get return message
-response = s.recv(8192)
+response = recv()
 
-if response.decode('latin1') == MESSAGE:
+if response == MESSAGE:
     print("Secure connection established")
 else:
     s.close()
@@ -63,19 +88,6 @@ try:
     }
 
     send_s = aes_.encrypt(json.dumps(send)).decode('latin1')
-    s.send(send_s.encode('utf8'))
+    sendMsg(send_s)
 except Exception as e:
     print(e)
-
-# while (True):
-#     msg = input()
-
-#     if msg == "stop":
-#         break
-
-#     enc = aes_.encrypt(msg).decode('latin1')
-
-#     send = {
-#         "message": enc
-#     }
-#     s.send(json.dumps(send).encode('utf8'))

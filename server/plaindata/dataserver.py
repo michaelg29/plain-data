@@ -30,50 +30,7 @@ class DataServer(TcpListener):
         print(r"Type 'stop' to quit")
 
     def clientConnected(self, client):
-        """ tcp handshake """
-        
-        # get client hello
-        """
-        {
-            "name": "name",
-            "platform": "platform"
-        }
-        """
-        response = json.loads(client.sock.recv(8192).decode('utf8'))
-
-        try:
-            client.name = response['name']
-            client.platform = response['platform']
-        except Exception as e:
-            self.clientFailedValidation(client)
-            return
-
-        # send public key
-        response = {
-            "e": self.pubKey[0],
-            "N": self.pubKey[1]
-        }
-        client.send(json.dumps(response))
-
-        # get shared key encrypted with public key
-        """
-        {
-            "shared_key": "encrypted shared key",
-            "enc_msg": "encrypted message
-        }
-        """
-        response = json.loads(client.sock.recv(16384).decode('utf_8'))
-
-        try:
-            client.key = rsa.decrypt_(self.__privKey, response['shared_key']).encode('utf8')
-            client.aes = pyaes.AESModeOfOperationCTR(client.key)
-
-            client.send(client.aes.decrypt(response['enc_msg']), False)
-        except Exception as e:
-            self.clientFailedValidation(client)
-            return
-
-        client.validated = True
+        client.validationStage = 0
 
     def clientFailedValidation(self, client):
         client.send("Failed validation, disconnecting")
@@ -86,21 +43,68 @@ class DataServer(TcpListener):
 
     def msgReceived(self, client, msg):
         if not client.validated:
+            self.validateClient(client, msg)
             return
-
-        try:
-            req = Message(msg, client)
-            
-        except Exception as e:
-            print(e)
-
+        print("client is validated")
+        req = Message(msg, client)
         req.parse()
+
+    def validateClient(self, client, msg):
+        """ tcp handshake """
+        if client.validationStage == 0:
+            # get client hello
+            """
+            {
+                "name": "name",
+                "platform": "platform"
+            }
+            """
+            response = json.loads(msg)
+
+            try:
+                client.name = response['name']
+                client.platform = response['platform']
+            except Exception as e:
+                print("DATASERVER -- 70:",e)
+                self.clientFailedValidation(client)
+                return
+
+            # send public key
+            response = {
+                "e": self.pubKey[0],
+                "N": self.pubKey[1]
+            }
+            client.send(8192, json.dumps(response))
+
+            client.validationStage = 1
+        elif client.validationStage == 1:
+            # get shared key encrypted with public key
+            """
+            {
+                "shared_key": "encrypted shared key",
+                "enc_msg": "encrypted message
+            }
+            """
+            response = json.loads(msg)
+
+            try:
+                client.key = rsa.decrypt_(self.__privKey, response['shared_key']).encode('utf8')
+                client.aes = pyaes.AESModeOfOperationCTR(client.key)
+
+                client.send(8192, client.aes.decrypt(response['enc_msg']), False)
+
+                client.validated = True
+            except Exception as e:
+                print("DATASERVER -- 104:",e)
+                self.clientFailedValidation(client)
+                return
 
     def serverEvent(self, msg):
         print("SERVER>", msg)
 
     def cmdThread(self):
-        cmd = input()
-        if cmd == "stop":
-            print("Server shutting down")
-            exit()
+        while True:
+            cmd = input()
+            if cmd == "stop":
+                print("Server shutting down")
+                exit()
