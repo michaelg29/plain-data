@@ -1,15 +1,16 @@
 import json
 import os
 
-files = []
-
-def loadFiles():
+class data:
     files = []
-    with open('files/manifest.json', 'r') as json_file:
-        files = json.load(json_file)
 
-    return files
+    def loadFiles():
+        try:
+            with open('files/manifest.json', 'r') as json_file:
+                data.files = json.load(json_file)
+        except:
+            data.files = []
 
-def saveFiles():
-    with open('files/manifest.json', 'w') as json_file:
-        json.dump(files, json_file)
+    def saveFiles():
+        with open('files/manifest.json', 'w') as json_file:
+            json.dump(data.files, json_file, indent=4)

@@ -2,22 +2,21 @@ import sys
 sys.path.append(r"C:\src\business-library\python")
 
 import json
+import io
 
 import mundusinvicte.security.aes as aes
-
-from .data import files, saveFiles
+from .data import data
+from .utils import padNumber
 
 class Message:
     def __init__(self, body, sender):
-        print("msg init, client validated =", sender.validated)
         self.sender = sender
         self.body = self.sender.aes.decrypt(body).decode('utf8')
         
     def get(self, key):
-        return self.json_body(key)
+        return self.json_body[key]
 
     def parse(self):
-        print("parse")
         """
         {
             "type": "upload-file",
@@ -29,44 +28,43 @@ class Message:
         """
 
         try:
-            print(self.body)
             self.json_body = json.loads(self.body)
             self.type = self.get('type')
-            print(self.type)
         except Exception as e:
             print("MESSGAE -- 36:", e)
 
         if self.type == 'upload-file':
-            print('upload')
             try:
                 self.filetype = self.get('filetype')
-                print("bkpt 1")
                 self.filename = self.get('filename')
-                print("bkpt 2")
                 self.author = self.get('author')
-                print("bkpt 3")
                 self.contents = self.get('contents')
-                print("bkpt 4")
 
                 atts = {
                     "filetype": self.filetype,
                     "filename": self.filename,
                     "author": self.author,
-                    "id": str(int(files[-1]["id"]) + 1)
+                    "id": padNumber(0, 6),
                 }
 
-                print(atts)
+                if len(data.files) != 0:
+                    atts['id'] = padNumber(int(data.files[-1]["id"]) + 1, 6)
 
-                files.append(atts)
+                data.files.append(atts)
 
-                print(files)
+                txt_types = [ "txt" ]
+                b_types = [ "pdf" ]
 
-                with open('files/' + atts['id'] + '.' + self.filetype, 'w') as f:
-                    f.write(self.contents)
-
-                saveFiles()
+                if self.filetype in txt_types:
+                    with open('files/' + atts['id'] + '.' + self.filetype, 'w') as f:
+                        f.write(self.contents)
+                elif self.filetype in b_types:
+                    with open("files/" + atts['id'] + '.' + atts['filetype'], mode='wb') as out:
+                        out.write(self.contents.encode('latin1'))                    
             except Exception as e:
-                print(e)
+                pass
+            finally:
+                data.saveFiles()
         elif self.type == 'download-file':
             pass
         elif self.type == 'request':

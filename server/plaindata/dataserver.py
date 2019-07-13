@@ -6,7 +6,7 @@ import pyaes
 
 from .dataclient import DataClient
 from .message import Message
-from .data import files, saveFiles, loadFiles
+from .data import data
 
 from mundusinvicte.networking.sockets.TcpListener import TcpListener
 import mundusinvicte.security.rsa as rsa
@@ -19,8 +19,6 @@ class DataServer(TcpListener):
         e, d, N = rsa.generateKeys(256)
         self.pubKey = (e, N)
         self.__privKey = (d, N)
-
-        files = loadFiles()
 
     def generateClientObject(self, clientsock, clientaddr):
         return DataClient(clientsock, clientaddr)
@@ -45,7 +43,7 @@ class DataServer(TcpListener):
         if not client.validated:
             self.validateClient(client, msg)
             return
-        print("client is validated")
+
         req = Message(msg, client)
         req.parse()
 
