@@ -7,6 +7,8 @@ function randrange(low, high) {
 }
 
 function powerMod(a, b, n) {
+    // TODO: not working as expected (not equal to python pow(a, b, n))
+
     /*
         return a ^ b % n
         implemented from: http://umaranis.com/2018/07/12/calculate-modular-exponentiation-powermod-in-javascript-ap-n/
