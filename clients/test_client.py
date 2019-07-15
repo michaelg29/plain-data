@@ -76,18 +76,18 @@ else:
     print("Insecure connection, terminating")
     sys.exit()
 
-try:
-    contents = open("C:\\Users\\Michael Grieco\\Downloads\\error_func.pdf", "rb").read()
+# try:
+#     contents = open("C:\\Users\\Michael Grieco\\Downloads\\error_func.pdf", "rb").read()
 
-    send = {
-        "type": "upload-file",
-        "filetype": "pdf",
-        "filename": "error_func.pdf",
-        "author": "Michael Grieco",
-        "contents": contents.decode('latin1'),
-    }
+#     send = {
+#         "type": "upload-file",
+#         "filetype": "pdf",
+#         "filename": "error_func.pdf",
+#         "author": "Michael Grieco",
+#         "contents": contents.decode('latin1'),
+#     }
 
-    send_s = aes_.encrypt(json.dumps(send))
-    sendMsg(send_s, False)
-except Exception as e:
-    print(e)
+#     send_s = aes_.encrypt(json.dumps(send))
+#     sendMsg(send_s, False)
+# except Exception as e:
+#     print(e)
