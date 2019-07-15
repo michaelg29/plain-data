@@ -51,7 +51,7 @@ sendMsg(json.dumps(response), True)
 
 # receive public key
 response = json.loads(recv())
-rsa_key = (int(response['e'], 2), int(response['N'], 16))
+rsa_key = (response['e'], response['N'])
 
 # generate aes key
 key = aes.generateKey().encode('utf8')
