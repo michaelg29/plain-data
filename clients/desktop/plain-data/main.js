@@ -1,4 +1,5 @@
 const electron = require('electron');
+const rsa = require('./js_utils/rsa.js');
 
 const { app, BrowserWindow } = electron;
 
