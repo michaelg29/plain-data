@@ -16,7 +16,7 @@ class DataServer(TcpListener):
     def __init__(self, ipAddr, port):
         super().__init__(ipAddr, port, True)
 
-        e, d, N = rsa.generateKeys(512)
+        e, d, N = rsa.generateKeys(256)
         self.pubKey = (e, N)
         self.__privKey = (d, N)
 
@@ -69,8 +69,8 @@ class DataServer(TcpListener):
 
             # send public key
             response = {
-                "e": self.pubKey[0],
-                "N": self.pubKey[1]
+                "e": '{0:00b}'.format(self.pubKey[0]),
+                "N": format(self.pubKey[1], 'x')
             }
             client.send(8192, json.dumps(response))
 
