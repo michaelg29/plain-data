@@ -1,10 +1,8 @@
-var rsa = require("node-bignumber");
-
 function rsa_encrypt(e, N, msg) {
-    var pub = new rsa.Key();
-    pub.setPublic(key_N, key_e);
-
-    return pub.encrypt(msg);
+    var python = require('child_process').spawn('python', ['./rsa.py', String(e), String(N), "\"" + msg + "\""]);
+    python.stdout.on('data',function(data){
+        console.log("data: ",data.toString('utf8'));
+    });
 }
 
 module.exports = {

@@ -12,6 +12,6 @@
     "electron": "^5.0.6"
   },
   "dependencies": {
-    "node-bignumber": "^1.2.1"
+    "python-shell": "^1.0.7"
   }
 }
