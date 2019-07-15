@@ -16,7 +16,7 @@ class DataServer(TcpListener):
     def __init__(self, ipAddr, port):
         super().__init__(ipAddr, port, True)
 
-        e, d, N = rsa.generateKeys(256)
+        e, d, N = rsa.generateKeys(512)
         self.pubKey = (e, N)
         self.__privKey = (d, N)
 
