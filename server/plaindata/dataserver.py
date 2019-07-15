@@ -69,8 +69,8 @@ class DataServer(TcpListener):
 
             # send public key
             response = {
-                "e": '{0:00b}'.format(self.pubKey[0]),
-                "N": format(self.pubKey[1], 'x')
+                "e": self.pubKey[0],
+                "N": self.pubKey[1]
             }
             client.send(8192, json.dumps(response))
 
