@@ -7,6 +7,8 @@ let mainWindow;
 
 // wait for app to be ready
 app.on('ready', function() {
+    client.start();
+
     // create window
     mainWindow = new BrowserWindow({
         width: 800,
@@ -23,4 +25,8 @@ app.on('ready', function() {
     mainWindow.on('closed', function() {
         app.quit();
     });
+});
+
+app.on('quit', function() {
+    client.cleanup();
 });

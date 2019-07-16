@@ -37,7 +37,7 @@ class DataServer(TcpListener):
         client.sock.close()
 
     def clientDisconnected(self, client):
-        pass
+        print("client disconnected")
 
     def msgReceived(self, client, msg):
         if not client.validated:
@@ -63,14 +63,13 @@ class DataServer(TcpListener):
                 client.name = response['name']
                 client.platform = response['platform']
             except Exception as e:
-                print("DATASERVER -- 70:",e)
                 self.clientFailedValidation(client)
                 return
 
             # send public key
             response = {
-                "e": self.pubKey[0],
-                "N": self.pubKey[1]
+                "e": str(self.pubKey[0]),
+                "N": str(self.pubKey[1])
             }
             client.send(8192, json.dumps(response))
 
@@ -87,9 +86,13 @@ class DataServer(TcpListener):
 
             try:
                 client.key = rsa.decrypt_(self.__privKey, response['shared_key']).encode('utf8')
+                print(client.key)
                 client.aes = pyaes.AESModeOfOperationCTR(client.key)
 
-                client.send(8192, client.aes.decrypt(response['enc_msg']), False)
+                print("enc:",response['enc_msg'])
+                dec = client.aes.decrypt(response['enc_msg'])
+                print("dec:",dec.decode('latin1'))
+                client.send(8192, dec, False)
 
                 client.validated = True
             except Exception as e:

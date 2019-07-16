@@ -12,6 +12,7 @@
     "electron": "^5.0.6"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "python-shell": "^1.0.7"
   }
 }
