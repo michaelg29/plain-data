@@ -20,26 +20,16 @@ function generateVector() {
     return crypto.randomBytes(16);
 }
 
-function encrypt(key, text, alg, iv, encoding) {
-    var cipher = crypto.createCipheriv(alg, key, iv);
-
-    encoding = encoding || "binary";
-
-    var result = cipher.update(text, "utf8", encoding);
-    result += cipher.final(encoding);
-
-    return result;
+function encrypt(key, text, finished) {
+    var python = require('child_process').exec('py js_utils/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
+        finished(stdout);
+    });
 }
 
-function decrypt(key, text, alg, iv, encoding) {
-    var decipher = crypto.createDecipheriv(alg, key, iv);
-
-    encoding = encoding || "binary";
-
-    var result = decipher.update(text, encoding);
-    result += decipher.final();
-
-    return result;
+function decrypt(key, text, finished) {
+    var python = require('child_process').exec('py js_utils/aes.py DECRYPT ' + key + ' ' + text, function (error, stdout, stderr) {
+        console.log("dec:",stdout);
+    });
 }
 
 function hex2String(array) {

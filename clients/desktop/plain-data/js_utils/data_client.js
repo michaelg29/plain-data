@@ -14,6 +14,7 @@ var msg_check;
 
 function sendMsg(msg) {
     client.write(msg + "finished");
+    response = {};
 }
 
 function processMsg(msg) {
@@ -34,13 +35,13 @@ function validateServer(msg) {
 
                 // generate aes key
                 aes_key = aes.generateKey(16);
-                console.log("key: " + aes_key);
 
+                // send key
                 rsa.rsa_encrypt(rsa_key[0], rsa_key[1], aes_key, sendKey);
+                
                 break;
             case 1:
                 // receive decrypted message
-                console.log("received: " + msg);
                 if (msg === msg_check) {
                     validated = true;
                     console.log("server validated");
@@ -58,19 +59,18 @@ function validateServer(msg) {
 }
 
 function sendKey(encrypted) {
-    console.log("msg: " + msg_check);
-
-    var enc_msg = aes.encrypt(aes_key, msg_check, "aes-128-ctr", aes.generateVector(), "base64");
-    console.log("enc_msg: " + enc_msg);
-
     // encrypt aes key and send
     response = {
         "shared_key": encrypted,
-        "enc_msg": enc_msg
     };
 
+    aes.encrypt(aes_key, msg_check, sendEncMsg);
+}
+
+function sendEncMsg(msg) {
+    response["enc_msg"] = String(msg).substring(2, msg.length - 2);
+
     sendMsg(JSON.stringify(response));
-    console.log("send message:49");
 
     validationStage++;
 }

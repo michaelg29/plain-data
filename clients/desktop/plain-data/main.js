@@ -5,28 +5,30 @@ const { app, BrowserWindow } = electron;
 
 let mainWindow;
 
+client.start();
+
 // wait for app to be ready
-app.on('ready', function() {
-    client.start();
+// app.on('ready', function() {
+//     client.start();
 
-    // create window
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            nodeIntegration: true
-        }
-    });
+//     // create window
+//     mainWindow = new BrowserWindow({
+//         width: 800,
+//         height: 600,
+//         webPreferences: {
+//             nodeIntegration: true
+//         }
+//     });
 
-    // load html into window
-    mainWindow.loadURL("index.html");
+//     // load html into window
+//     mainWindow.loadURL("index.html");
 
-    // quit app when closed
-    mainWindow.on('closed', function() {
-        app.quit();
-    });
-});
+//     // quit app when closed
+//     mainWindow.on('closed', function() {
+//         app.quit();
+//     });
+// });
 
-app.on('quit', function() {
-    client.cleanup();
-});
+// app.on('quit', function() {
+//     client.cleanup();
+// });
