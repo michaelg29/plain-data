@@ -1,6 +1,4 @@
 const electron = require('electron');
-const url = require('url');
-const path = require('path');
 
 const client = require('./js_utils/data_client')
 
@@ -20,15 +18,12 @@ app.on('ready', function() {
         height: 600,
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        icon: __dirname + '/assets/cgi-bin/icon.png',
     });
 
     // load html into window
-    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'content/index.html'),
-        protocol: 'file:',
-        slashes: true,
-    }));
+    mainWindow.loadURL(__dirname + '/content/index.html');
 
     // quit app when closed
     mainWindow.on('closed', function() {
