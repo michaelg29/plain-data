@@ -11,7 +11,7 @@
 <body>
     <section>
         <div id="nav-container">
-            <a onclick="goto_pg('dashboard');" href="">Click me</a>
+            <a onclick="goto_pg('dashboard')">Click me</a>
         </div>
 
         <div id="content-container">
@@ -36,7 +36,6 @@
 
         // load html content from page
         function goto_pg(route) {
-            console.log("goto " + route);
             jQuery('#content-container').load(routes[route]);
         }
 

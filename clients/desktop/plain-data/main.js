@@ -10,6 +10,8 @@ let mainWindow;
 
 var online = false;
 
+const DEFAULT_PAGE = "dashboard";
+
 // wait for app to be ready
 app.on('ready', function() {
     // create window
@@ -32,12 +34,12 @@ app.on('ready', function() {
     mainWindow.on('closed', function() {
         app.quit();
     });
-
-    sendMsg('page:go','dashboard');
 });
 
 // catch window ready
 ipcMain.on('window:ready', function(e) {
+    sendMsg('page:go', DEFAULT_PAGE);
+
     //client.start();
 });
 
@@ -59,7 +61,6 @@ sendAlert = function(code) {
 
 sendMsg = function(code, data) {
     if (mainWindow) {
-        console.log("sent");
         mainWindow.webContents.send(code, data);
     }
 };

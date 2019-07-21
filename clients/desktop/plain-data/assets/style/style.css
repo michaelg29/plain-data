@@ -33,8 +33,7 @@ html, body {
     height: 100%;
 }
 
-@media (orientation: landscape) {
-    #content-container {
-        
-    }
+/*==================================TEXT==================================*/
+a {
+    cursor: pointer;
 }
