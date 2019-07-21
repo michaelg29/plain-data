@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plain Data</title>
+
+    <link rel="stylesheet" href="../assets/style/style.css"/>
+    <link rel="stylesheet" href="../assets/style/nav.css"/>
+</head>
+<body>
+    <section>
+        <div id="nav-container">
+            <a onclick="goto_pg('dashboard');" href="">Click me</a>
+        </div>
+
+        <div id="content-container">
+
+        </div>
+
+        <div id="footer-cotnainer">
+
+        </div>
+    </section>
+
+    <script>
+        const electron = require('electron');
+        const jQuery = require('jquery');
+        const {ipcRenderer} = electron;
+
+        const content_container = document.querySelector("#content-container");
+
+        const routes = {
+            "dashboard": "dashboard.html",
+        }
+
+        // load html content from page
+        function goto_pg(route) {
+            console.log("goto " + route);
+            jQuery('#content-container').load(routes[route]);
+        }
+
+        // get signal from backend js to change page
+        ipcRenderer.on('page:go', function(e, route) {
+            goto_pg(route);
+        });
+
+        // on ready
+        ipcRenderer.send('window:ready');
+    </script>
+</body>
+</html>
