@@ -6,12 +6,19 @@
     <title>Plain Data</title>
 
     <link rel="stylesheet" href="../assets/style/style.css"/>
+    <link rel="stylesheet" href="../assets/style/menubar.css"/>
     <link rel="stylesheet" href="../assets/style/nav.css"/>
 </head>
 <body>
     <section>
+        <div id="menubar-container">
+            <a id="min-btn" class="menubar-btn" onclick="renderer.minimize()"></a>
+            <a id="max-btn" class="menubar-btn" onclick="renderer.maximize()"></a>
+            <a id="quit-btn" class="menubar-btn" onclick="renderer.quit()"></a>
+        </div>
+
         <div id="nav-container">
-            <a onclick="goto_pg('dashboard')">Click me</a>
+            
         </div>
 
         <div id="content-container">
@@ -24,28 +31,7 @@
     </section>
 
     <script>
-        const electron = require('electron');
-        const jQuery = require('jquery');
-        const {ipcRenderer} = electron;
-
-        const content_container = document.querySelector("#content-container");
-
-        const routes = {
-            "dashboard": "dashboard.html",
-        }
-
-        // load html content from page
-        function goto_pg(route) {
-            jQuery('#content-container').load(routes[route]);
-        }
-
-        // get signal from backend js to change page
-        ipcRenderer.on('page:go', function(e, route) {
-            goto_pg(route);
-        });
-
-        // on ready
-        ipcRenderer.send('window:ready');
+        const renderer = require('./../js_content/renderer');
     </script>
 </body>
 </html>

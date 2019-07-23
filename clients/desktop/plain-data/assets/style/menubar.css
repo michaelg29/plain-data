@@ -1,0 +1,35 @@
+#menubar-container {
+    -webkit-app-region: drag;
+
+    background-color: slategray;
+    color: white;
+
+    padding: 5px 0;
+    margin: 0;
+
+    width: 100%;
+}
+
+#menubar-container * {
+    -webkit-app-region: no-drag;
+}
+
+#menubar-container a {
+    cursor: pointer;
+}
+
+a.menubar-btn {
+    padding: 5px 10px;
+}
+
+#min-btn::after {
+    content: '\2500';
+}
+
+#max-btn::after {
+    content: '\25A2';
+}
+
+#quit-btn::after {
+    content: '\2297';
+}

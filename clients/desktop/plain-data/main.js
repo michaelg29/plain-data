@@ -1,8 +1,8 @@
 const electron = require('electron');
 
-const client = require('./js_utils/data_client')
+const client = require('./js_utils/data_client');
 
-const { app, BrowserWindow, ipcMain } = electron;
+const { app, BrowserWindow, ipcMain, Menu } = electron;
 
 let mainWindow;
 
@@ -20,15 +20,16 @@ app.on('ready', function() {
             nodeIntegration: true
         },
         icon: __dirname + '/assets/cgi-bin/icon.png',
+        frame: false,
     });
 
     // load html into window
     mainWindow.loadURL(__dirname + '/content/index.html');
 
     // quit app when closed
-    mainWindow.on('closed', function() {
-        app.quit();
-    });
+    mainWindow.on('closed', () => app.quit());
+
+    mainWindow.webContents.openDevTools();
 });
 
 // catch window ready
