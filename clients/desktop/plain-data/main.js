@@ -1,6 +1,6 @@
 const electron = require('electron');
 
-process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = 'production';
 
 // script utils
 const client = require('./js_utils/data_client');
