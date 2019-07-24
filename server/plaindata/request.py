@@ -8,7 +8,7 @@ import mundusinvicte.security.aes as aes
 from .data import data
 from .utils import padNumber
 
-class Message:
+class Request:
     def __init__(self, body, sender):
         self.sender = sender
         self.body = self.sender.aes.decrypt(body).decode('utf8')

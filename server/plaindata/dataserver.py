@@ -5,7 +5,7 @@ import json
 import pyaes
 
 from .dataclient import DataClient
-from .message import Message
+from .request import Request
 from .data import data
 
 from mundusinvicte.networking.sockets.TcpListener import TcpListener
@@ -44,7 +44,7 @@ class DataServer(TcpListener):
             self.validateClient(client, msg)
             return
 
-        req = Message(msg, client)
+        req = Request(msg, client)
         req.parse()
 
     def validateClient(self, client, msg):
