@@ -6,7 +6,8 @@ import pyaes
 
 from .dataclient import DataClient
 from .request import Request
-from .data import data
+from .data.data import data
+from .data.git import saveFile, push
 
 from mundusinvicte.networking.sockets.TcpListener import TcpListener
 import mundusinvicte.security.rsa as rsa
