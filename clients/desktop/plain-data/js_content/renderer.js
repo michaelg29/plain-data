@@ -18,33 +18,9 @@ ipcRenderer.on('page:go', function(e, route) {
     goto_pg(route);
 });
 
-// quit
-function quit() {
-    remote.app.quit();
-}
-
-// maximize window
-function maximize() {
-    var window = remote.getCurrentWindow();
-    if (!window.isMaximized()) {
-        window.maximize();          
-    } else {
-        window.unmaximize();
-    }
-}
-
-// minimize window
-function minimize() {
-    var window = remote.getCurrentWindow();
-    window.minimize();
-}
-
 // on ready
 ipcRenderer.send('window:ready');
 
 module.exports = {
     goto_pg,
-    quit,
-    maximize,
-    minimize
 }
