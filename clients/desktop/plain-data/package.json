@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "crypto": "^1.0.1",
+    "custom-electron-titlebar": "^3.0.10",
     "jquery": "^3.4.1",
     "python-shell": "^1.0.7"
   }
