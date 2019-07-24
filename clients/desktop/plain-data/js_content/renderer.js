@@ -2,6 +2,14 @@ const electron = require('electron');
 const jQuery = require('jquery');
 const { ipcRenderer, remote } = electron;
 
+const titlebar = require('custom-electron-titlebar');
+
+new titlebar.Titlebar({
+    backgroundColor: titlebar.Color.fromHex('#37474f'),
+    icon: './../assets/cgi-bin/icon.png',
+    shadow: true
+})
+
 const content_container = document.querySelector("#content-container");
 
 const routes = {
