@@ -1,18 +1,22 @@
 const electron = require('electron');
+const path = require('path');
+
+const { app, BrowserWindow, ipcMain, Menu } = electron;
+app.setName("Plain Data");
 
 // process.env.NODE_ENV = 'production';
 
 // script utils
 const client = require('./js_utils/data_client');
 
+// script content
 const menubar = require('./js_content/menubar');
 
-const { app, BrowserWindow, ipcMain, Menu } = electron;
-
+// window variable
 let mainWindow;
 
+// app variables
 var online = false;
-
 const DEFAULT_PAGE = "dashboard";
 
 // wait for app to be ready
@@ -25,16 +29,12 @@ app.on('ready', function() {
             nodeIntegration: true
         },
         icon: __dirname + '/assets/cgi-bin/icon.png',
-        frame: false,
-        show: false
+        frame: process.platform === "darwin",
+        title: "Plain Data"
     });
 
     // load html into window
-    mainWindow.loadURL(__dirname + '/content/index.html');
-
-    mainWindow.once('ready-to-show', function() {
-        return mainWindow.show(); 
-    });
+    mainWindow.loadURL(path.join('file://', __dirname, 'content/index.html'));
 
     // quit app when closed
     mainWindow.on('closed', () => app.quit());

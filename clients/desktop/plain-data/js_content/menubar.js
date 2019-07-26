@@ -78,14 +78,10 @@ if (process.platform === 'darwin') {
             { role: 'quit' }
         ]
     });
-    // Window menu
-    template[3].submenu = [
-        { role: 'close' },
-        { role: 'minimize' },
-        { role: 'zoom' },
-        { type: 'separator' },
-        { role: 'front' }
-    ];
+}
+
+function showAboutWindow() {
+
 }
 
 electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(template));
