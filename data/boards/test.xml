@@ -1,0 +1,24 @@
+<board>
+    <name>Test board</name>
+    <creator>Creator</creator>
+    <category>Category</category>
+    <tags>tag1|tag2|tag3<tags>
+    <content> <!-- to be read as html in client -->
+        <div>
+            <p>Board content</p>
+            <file src="000000.pdf"/>
+        </div>
+    </content>
+    <comments>
+        <comment>
+            <author>Author</author>
+            <postdate>2019-07-26</postdate>
+            <content> <!-- to be read as html in client -->
+                <div>
+                    <p>Board content</p>
+                    <file src="000000.pdf"/>
+                </div>
+            </content>
+        </comment>
+    </comments>
+</board>
