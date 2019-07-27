@@ -1,2 +1,2 @@
-py server/main.py
+python server/main.py
 pause
