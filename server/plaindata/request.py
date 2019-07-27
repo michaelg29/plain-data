@@ -56,10 +56,10 @@ class Request:
                 b_types = [ "pdf" ]
 
                 if self.filetype in txt_types:
-                    with open('files/' + atts['id'] + '.' + self.filetype, 'w') as f:
+                    with open('data/files/' + atts['id'] + '.' + self.filetype, 'w') as f:
                         f.write(self.contents)
                 elif self.filetype in b_types:
-                    with open("files/" + atts['id'] + '.' + atts['filetype'], mode='wb') as out:
+                    with open("data/files/" + atts['id'] + '.' + atts['filetype'], mode='wb') as out:
                         out.write(self.contents.encode('latin1'))                    
             except Exception as e:
                 pass
