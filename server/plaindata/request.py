@@ -5,7 +5,7 @@ import json
 import io
 
 import mundusinvicte.security.aes as aes
-from .data import data
+from .data.local import localData
 from .utils import padNumber
 
 class Request:
@@ -19,11 +19,7 @@ class Request:
     def parse(self):
         """
         {
-            "type": "upload-file",
-            "filetype": "pdf",
-            "filename": "filename.pdf",
-            "author": "author",
-            "contents": "contents",
+            "action": "GET"|"POST"|"UPDATE"|"CREATE"
         }
         """
 
@@ -34,33 +30,26 @@ class Request:
             print("MESSGAE -- 36:", e)
 
         if self.type == 'upload-file':
+            print('upload file request')
             try:
-                self.filetype = self.get('filetype')
-                self.filename = self.get('filename')
-                self.author = self.get('author')
                 self.contents = self.get('contents')
 
                 atts = {
-                    "filetype": self.filetype,
-                    "filename": self.filename,
-                    "author": self.author,
+                    "filetype": self.get('filetype'),
+                    "filename": self.get('filename'),
+                    "author": self.get('author'),
                     "id": padNumber(0, 6),
                 }
 
-                if len(data.files) != 0:
-                    atts['id'] = padNumber(int(data.files[-1]["id"]) + 1, 6)
+                if len(localData.files) != 0:
+                    atts['id'] = padNumber(int(localData.files[-1]["id"]) + 1, 6)
 
-                data.files.append(atts)
+                localData.files.append(atts)
 
                 txt_types = [ "txt" ]
                 b_types = [ "pdf" ]
 
-                if self.filetype in txt_types:
-                    with open('data/files/' + atts['id'] + '.' + self.filetype, 'w') as f:
-                        f.write(self.contents)
-                elif self.filetype in b_types:
-                    with open("data/files/" + atts['id'] + '.' + atts['filetype'], mode='wb') as out:
-                        out.write(self.contents.encode('latin1'))                    
+                localData.writeFile(atts['id'] + '.' + atts['filetype'], atts['filetype'] in b_types)
             except Exception as e:
                 pass
             finally:
