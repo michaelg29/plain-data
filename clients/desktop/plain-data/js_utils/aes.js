@@ -21,14 +21,14 @@ function generateVector() {
 }
 
 function encrypt(key, text, finished) {
-    var python = require('child_process').exec('py js_utils/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
+    var python = require('child_process').exec('python js_utils/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
         finished(stdout);
     });
 }
 
 function decrypt(key, text, finished) {
-    var python = require('child_process').exec('py js_utils/aes.py DECRYPT ' + key + ' ' + text, function (error, stdout, stderr) {
-        console.log("dec:",stdout);
+    var python = require('child_process').exec('python js_utils/aes.py DECRYPT ' + key + ' ' + text, function (error, stdout, stderr) {
+        finished(stdout);
     });
 }
 

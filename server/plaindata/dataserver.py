@@ -59,7 +59,6 @@ class DataServer(TcpListener):
             }
             """
             response = json.loads(msg)
-            print('get hello')
 
             try:
                 client.name = response['name']
@@ -74,7 +73,6 @@ class DataServer(TcpListener):
                 "N": str(self.pubKey[1])
             }
             client.send(8192, json.dumps(response))
-            print('send public key')
 
             client.validationStage = 1
         elif client.validationStage == 1:
@@ -86,14 +84,12 @@ class DataServer(TcpListener):
             }
             """
             response = json.loads(msg)
-            print('get shared key')
             try:
                 client.key = rsa.decrypt_(self.__privKey, response['shared_key'])
                 enc = response['enc_msg'][:-1].encode().decode('unicode-escape').encode('ISO-8859-1')
 
                 dec = aes.decrypt(client.key, enc)
                 client.send(8192, dec, False)
-                print('send dec', dec)
 
                 client.validated = True
             except Exception as e:

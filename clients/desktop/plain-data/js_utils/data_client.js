@@ -59,6 +59,8 @@ function validateServer(msg) {
 }
 
 function sendKey(encrypted) {
+    msg_check = aes.generateKey(24);
+
     // encrypt aes key and send
     response = {
         "shared_key": encrypted,
