@@ -17,7 +17,7 @@ let mainWindow;
 
 // app variables
 var online = false;
-const DEFAULT_PAGE = "dashboard";
+const DEFAULT_PAGE = "login";
 
 // wait for app to be ready
 app.on('ready', function() {

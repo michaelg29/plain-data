@@ -1,10 +1,22 @@
 <section>
-    <form id="login-form">
+    <form id="login-form" style="margin-top: 100px;">
+        <div class="form-item">
+            <label for="username">Username</label>
+            <input type="text" id="username"/>
+        </div>
 
+        <div class="form-item">
+            <label for="password">Password</label>
+            <input type="password" id="password"/>
+        </div>
+
+        <button type="submit" class="a-btn">Log In</button>
+
+        <div class="form-other-options">
+            <a onclick="createAccount()">Don't have an account?</a>
+            <a onclick="forgotPassword()">Forgot your password?</a>
+        </div>
     </form>
-
-    <a onclick="createAccount()">Don't have an account?</a>
-    <a onclick="forgotPassword()">Forgot your password?</a>
 </section>
 
 <script>
