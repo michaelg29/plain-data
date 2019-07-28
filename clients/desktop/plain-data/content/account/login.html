@@ -1,0 +1,29 @@
+<section>
+    <form id="login-form">
+
+    </form>
+
+    <a onclick="createAccount()">Don't have an account?</a>
+    <a onclick="forgotPassword()">Forgot your password?</a>
+</section>
+
+<script>
+    const electron = require('electron');
+    const { ipcRenderer } = electron;
+    
+    const jQuery = require('jquery');
+
+    const renderer = require('./../js_content/renderer');
+
+    jQuery('#login-form').on('submit', () => {
+
+    });
+
+    function createAccount() {
+        renderer.goto_pg('create_account');
+    }
+
+    function forgotPassword() {
+        renderer.goto_pg('forgot_pwd');
+    }
+</script>
