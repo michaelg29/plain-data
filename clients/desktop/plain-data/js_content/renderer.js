@@ -17,6 +17,9 @@ if (process.platform !== "darwin") {
 
 const routes = {
     "dashboard": "dashboard.html",
+    "login": "account/login.html",
+    "create_account": "account/create.html",
+    "forgot_pwd": "account/forgot.html"
 }
 
 // load html content from page
@@ -30,7 +33,7 @@ ipcRenderer.on('page:go', function(e, route) {
 });
 
 // ============================== CONFIG VALUES ==========================
-const config = require('../js_utils/config');
+const config = require('../js_utils/global/config');
 
 function updateAllConfigs() {
     updateConfig("connection");

@@ -1,5 +1,5 @@
-const rsa = require('./rsa');
-const aes = require('./aes');
+const rsa = require('../enc/rsa');
+const aes = require('../enc/aes');
 var net = require('net');
 
 var client;

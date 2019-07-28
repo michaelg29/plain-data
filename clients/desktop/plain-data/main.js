@@ -7,7 +7,7 @@ app.setName("Plain Data");
 // process.env.NODE_ENV = 'production';
 
 // script utils
-const client = require('./js_utils/data_client');
+const client = require('./js_utils/global/data_client');
 
 // script content
 const menubar = require('./js_content/menubar');
