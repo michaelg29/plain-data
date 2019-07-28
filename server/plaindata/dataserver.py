@@ -8,6 +8,7 @@ from .dataclient import DataClient
 from .request import Request
 from .data.local import localData
 from .data.git import saveFile, push
+from .data.sql import sql_init, sql_executeReadQuery, sql_executeWriteQuery, sql_cleanup
 
 from mundusinvicte.networking.sockets.TcpListener import TcpListener
 import mundusinvicte.security.rsa as rsa
@@ -27,6 +28,8 @@ class DataServer(TcpListener):
     def serverStarted(self):
         print("Server started at", self.ipAddr, "on port", self.port)
         print(r"Type 'stop' to quit")
+
+        sql_init()
 
     def clientConnected(self, client):
         client.validationStage = 0
@@ -108,4 +111,5 @@ class DataServer(TcpListener):
             cmd = input()
             if cmd == "stop":
                 print("Server shutting down")
+                sql_cleanup()
                 exit()
