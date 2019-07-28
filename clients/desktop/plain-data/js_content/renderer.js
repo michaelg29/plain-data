@@ -2,6 +2,7 @@ const electron = require('electron');
 const jQuery = require('jquery');
 const { ipcRenderer, remote } = electron;
 
+// ========================== MENUBAR ======================
 const titlebar = require('custom-electron-titlebar');
 
 if (process.platform !== "darwin") {
@@ -12,7 +13,7 @@ if (process.platform !== "darwin") {
     });
 }
 
-const content_container = document.querySelector("#content-container");
+// ======================== CONTENT CONTAINER ================================
 
 const routes = {
     "dashboard": "dashboard.html",
@@ -28,9 +29,33 @@ ipcRenderer.on('page:go', function(e, route) {
     goto_pg(route);
 });
 
+// ============================== CONFIG VALUES ==========================
+const config = require('../js_utils/config');
+
+function updateAllConfigs() {
+    updateConfig("connection");
+    updateConfig("account");
+}
+
+function updateConfig(property) {
+    switch (property) {
+        case "connection":
+            document.querySelector("#footer-property-connection").innerHTML = "Connection Status: " + (config.online ? "Online" : "Offline");
+            break;
+
+        case "account":
+                document.querySelector("#footer-property-account").innerHTML = "Account Status: " + (config.loggedIn ? "Logged In" : "Not Logged In");
+            break;
+    };
+}
+
+// ============================== RUNTIME ========================
+
 // on ready
 ipcRenderer.send('window:ready');
 
 module.exports = {
     goto_pg,
+    updateConfig,
+    updateAllConfigs
 }

@@ -21,12 +21,16 @@
         </div>
 
         <div id="footer-container">
-            <a>Footer</a>
+            <ul id="properties-list">
+                <li id="footer-property-connection">Connection Status: </li>
+                <li id="footer-property-account">Account Status: </li>
+            </ul>
         </div>
     </section>
 
     <script>
         const renderer = require('./../js_content/renderer');
+        renderer.updateAllConfigs();
     </script>
 </body>
 </html>

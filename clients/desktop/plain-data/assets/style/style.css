@@ -24,6 +24,7 @@ html, body, section {
 
 :root {
     --main-bg-color: #363a41;
+    --secondary-bg-color: #52638C;
 }
 
 #content-container {
@@ -42,7 +43,7 @@ html, body, section {
     width: 100%;
     height: 20px;
 
-    background-color: var(--main-bg-color);
+    background-color: var(--secondary-bg-color);
 }
 
 /*==================================TEXT==================================*/

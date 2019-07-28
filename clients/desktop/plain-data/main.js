@@ -46,12 +46,12 @@ app.on('ready', function() {
 ipcMain.on('window:ready', function(e) {
     sendMsg('page:go', DEFAULT_PAGE);
 
-    client.start();
+    //client.start();
 });
 
 // before exiting
 app.on('before-quit', function() {
-    client.cleanup();
+    //client.cleanup();
 })
 
 // on quit
