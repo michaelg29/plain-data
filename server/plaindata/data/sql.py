@@ -1,6 +1,7 @@
 import pyodbc
 
 # connection
+driver = '{SQL SERVER}'
 server = 'localhost' 
 database = 'plain-data' 
 username = 'plain-data-server' 
@@ -12,7 +13,7 @@ class sql:
 
     def sql_init():
         try:
-            sql.cnxn = pyodbc.connect('DRIVER={SQL Server};Server='+server+';Database='+database+';User Id='+username+';Password='+ password)
+            sql.cnxn = pyodbc.connect(f"DRIVER={driver};Server={server};Database={database};User Id={username};Password={password}")
             print('sql connection established')
 
             sql.cursor = sql.cnxn.cursor()
@@ -30,11 +31,13 @@ class sql:
 
     def sql_executeWriteQuery(query):
         try:
+            print('q:',query)
             sql.cursor.execute(query)
 
             # commit changes
             sql.cnxn.commit()
-        except:
+        except Exception as e:
+            print("SQl40:",e)
             # rollback with error
             sql.cnxn.rollback()
 

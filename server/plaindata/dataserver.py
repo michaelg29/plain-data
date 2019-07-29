@@ -10,6 +10,8 @@ from .data.local import localData
 from .data.git import saveFile, push
 from .data.sql import sql
 
+from .models import user
+
 from mundusinvicte.networking.sockets.TcpListener import TcpListener
 import mundusinvicte.security.rsa as rsa
 import mundusinvicte.security.aes as aes
