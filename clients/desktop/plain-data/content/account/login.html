@@ -20,15 +20,15 @@
 </section>
 
 <script>
-    const electron = require('electron');
-    const { ipcRenderer } = electron;
-    
-    const jQuery = require('jquery');
-
-    const renderer = require('./../js_content/renderer');
-
     jQuery('#login-form').on('submit', () => {
+        var username = jQuery('#username').val();
+        var pwd = jQuery('#password').val();
 
+        if (account.login(username, pwd)) {
+
+        } else {
+            
+        }
     });
 
     function createAccount() {
