@@ -17,6 +17,10 @@ function sendMsg(msg) {
     response = {};
 }
 
+function sendEncMsg(msg) {
+    aes.encrypt(aes_key, msg, sendMsg);
+}
+
 function processMsg(msg) {
     if (validated) {
 
@@ -66,10 +70,10 @@ function sendKey(encrypted) {
         "shared_key": encrypted,
     };
 
-    aes.encrypt(aes_key, msg_check, sendEncMsg);
+    aes.encrypt(aes_key, msg_check, sendValidationMsg);
 }
 
-function sendEncMsg(msg) {
+function sendValidationMsg(msg) {
     response["enc_msg"] = String(msg).substring(2, msg.length - 2);
 
     sendMsg(JSON.stringify(response));
@@ -117,7 +121,8 @@ function cleanup() {
 }
 
 module.exports = {
-    sendMsg: sendMsg,
-    start: start,
-    cleanup: cleanup,
+    sendMsg,
+    sendEncMsg,
+    start,
+    cleanup,
 };
