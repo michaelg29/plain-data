@@ -1,6 +1,8 @@
 const electron = require('electron');
+const { ipcRenderer } = electron;
+const dialog = electron.remote.dialog;
+
 const jQuery = require('jquery');
-const { ipcRenderer, remote } = electron;
 
 // ========================== MENUBAR ======================
 const titlebar = require('custom-electron-titlebar');
@@ -32,6 +34,16 @@ ipcRenderer.on('page:go', function(e, route) {
     goto_pg(route);
 });
 
+// ============================= ALERT ==============================
+function alert_message(type, title, message) {
+    dialog.showMessageBox({
+        type: type,
+        buttons: [ 'OK' ],
+        title: title,
+        message: message,
+    });
+}
+
 // ============================== CONFIG VALUES ==========================
 const config = require('../js_utils/global/config');
 
@@ -60,5 +72,6 @@ ipcRenderer.send('window:ready');
 module.exports = {
     goto_pg,
     updateConfig,
-    updateAllConfigs
+    updateAllConfigs,
+    alert_message
 }
