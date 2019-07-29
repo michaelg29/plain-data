@@ -31,7 +31,6 @@ class sql:
 
     def sql_executeWriteQuery(query):
         try:
-            print('q:',query)
             sql.cursor.execute(query)
 
             # commit changes

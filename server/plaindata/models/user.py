@@ -10,11 +10,8 @@ def validateUser(username, password):
     else:
         return None
 
-def createUser(user):
-    ret = {
-        "result": True,
-        "reasons": []
-    }
+def validateNewData(user):
+    ret = validateData(user)
 
     # validate username
     check = sql.sql_executeReadQuery(f"select Username from dbo.Users where Username = '{user['Username']}'")
@@ -29,6 +26,14 @@ def createUser(user):
     if check:
         ret['result'] = False
         ret['reasons'].append('email.exists')
+
+    return ret
+
+def validateData(user):
+    ret = {
+        "result": True,
+        "reasons": []
+    }
 
     # validate password
     upper_count = 0
@@ -69,6 +74,11 @@ def createUser(user):
         ret['result'] = False
         ret['reasons'].append('pwd.symbol')
 
+    return ret
+
+def createUser(user):
+    ret = validateData(user)
+
     # add user to table
     if ret['result']:
         try:
@@ -76,6 +86,19 @@ def createUser(user):
 
             # get created id
             ret['id'] = sql.sql_executeReadQuery(f"select ID from dbo.Users where Username = '{user['Username']}'")[0][0]
+        except Exception as e:
+            print(e)
+            ret['result'] = False
+            ret['reasons'].append('cnxn')
+
+    return ret
+
+def saveUser(user):
+    ret = validateData(user)
+
+    if ret['result']:
+        try:
+            sql.sql_executeWriteQuery(f"update dbo.Users set LastName = '{user['LastName']}', FirstName = '{user['FirstName']}', Username = '{user['Username']}', Password = '{user['Password']}', Email = '{user['Email']}' where ID = {user['ID']}")
         except Exception as e:
             print(e)
             ret['result'] = False
