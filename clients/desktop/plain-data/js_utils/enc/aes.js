@@ -16,10 +16,6 @@ function generateKey(size) {
     return key;
 }
 
-function generateVector() {
-    return crypto.randomBytes(16);
-}
-
 function encrypt(key, text, finished) {
     var python = require('child_process').exec('python js_utils/enc/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
         finished(stdout);
@@ -42,7 +38,6 @@ function hex2String(array) {
 
 module.exports = {
     generateKey: generateKey,
-    generateVector: generateVector,
     encrypt: encrypt,
     decrypt: decrypt,
     hex2String: hex2String,
