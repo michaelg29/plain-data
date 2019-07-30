@@ -11,22 +11,40 @@ var aes_key;
 var msg_ = "";
 var response;
 var msg_check;
+var responseAction = validateServer;
+var responded = true;
 
 function sendMsg(msg) {
     client.write(msg + "finished");
     response = {};
 }
 
-function sendEncMsg(msg) {
+function encAndSend(msg) {
     aes.encrypt(aes_key, msg, sendMsg);
 }
 
-function processMsg(msg) {
-    if (validated) {
-
-    } else {
-        validateServer(msg);
+function msgReceived(msg) {
+    if (serverValidated) {
+        aes.decrypt(aes_key, msg, processMsg);
+        return;
     }
+
+    processMsg(msg);
+}
+
+function processMsg(msg) {
+    responseAction(msg);
+    responded = true;
+}
+
+function setResponseAction(action) {
+    if (responded) {
+        responseAction = action;
+        responded = false;
+        return true;
+    }
+
+    return false;
 }
 
 function validateServer(msg) {
@@ -122,7 +140,8 @@ function cleanup() {
 
 module.exports = {
     sendMsg,
-    sendEncMsg,
+    encAndSend,
     start,
     cleanup,
+    setResponseAction,
 };
