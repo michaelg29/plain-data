@@ -135,7 +135,11 @@ function start() {
 }
 
 function cleanup() {
-    
+    client.destroy();
+}
+
+function genReqId() {
+    return aes.generateKey(24);
 }
 
 module.exports = {
@@ -144,4 +148,5 @@ module.exports = {
     start,
     cleanup,
     setResponseAction,
+    genReqId,
 };
