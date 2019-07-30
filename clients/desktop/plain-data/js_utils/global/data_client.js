@@ -26,7 +26,7 @@ function encAndSend(msg) {
 }
 
 function msgReceived(msg) {
-    if (serverValidated) {
+    if (validated) {
         aes.decrypt(aes_key, msg, processMsg);
         return;
     }
@@ -38,7 +38,7 @@ function processMsg(msg) {
     var idMatch = msg['reqId'] === currentReqId;
     currentReqId = "";
 
-    if (idMatch) {
+    if (idMatch || !validated) {
         responseAction(msg);
     } else {
         console.log("communications error");
