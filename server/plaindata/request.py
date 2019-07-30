@@ -17,46 +17,40 @@ class Request:
         return self.json_body[key]
 
     def parse(self):
-        """
-        {
-            "action": "GET"|"POST"|"UPDATE"|"CREATE"
-        }
-        """
-
         try:
             self.json_body = json.loads(self.body)
             self.type = self.get('type')
         except Exception as e:
             print("MESSGAE -- 36:", e)
 
-        if self.type == 'upload-file':
-            print('upload file request')
-            try:
-                self.contents = self.get('contents')
+# if self.type == 'upload-file':
+#     print('upload file request')
+#     try:
+#         self.contents = self.get('contents')
 
-                atts = {
-                    "filetype": self.get('filetype'),
-                    "filename": self.get('filename'),
-                    "author": self.get('author'),
-                    "id": padNumber(0, 6),
-                }
+#         atts = {
+#             "filetype": self.get('filetype'),
+#             "filename": self.get('filename'),
+#             "author": self.get('author'),
+#             "id": padNumber(0, 6),
+#         }
 
-                if len(localData.files) != 0:
-                    atts['id'] = padNumber(int(localData.files[-1]["id"]) + 1, 6)
+#         if len(localData.files) != 0:
+#             atts['id'] = padNumber(int(localData.files[-1]["id"]) + 1, 6)
 
-                localData.files.append(atts)
+#         localData.files.append(atts)
 
-                txt_types = [ "txt" ]
-                b_types = [ "pdf" ]
+#         txt_types = [ "txt" ]
+#         b_types = [ "pdf" ]
 
-                localData.writeFile(atts['id'] + '.' + atts['filetype'], atts['filetype'] in b_types)
-            except Exception as e:
-                pass
-            finally:
-                data.saveFiles()
-        elif self.type == 'download-file':
-            pass
-        elif self.type == 'request':
-            pass
-        elif self.type == 'send':
-            pass
+#         localData.writeFile(atts['id'] + '.' + atts['filetype'], atts['filetype'] in b_types)
+#     except Exception as e:
+#         pass
+#     finally:
+#         data.saveFiles()
+# elif self.type == 'download-file':
+#     pass
+# elif self.type == 'request':
+#     pass
+# elif self.type == 'send':
+#     pass
