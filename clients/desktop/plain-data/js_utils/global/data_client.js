@@ -12,7 +12,7 @@ var msg_ = "";
 var response;
 var msg_check;
 var responseAction = validateServer;
-var responded = true;
+var currentReqId = "";
 
 function sendMsg(msg) {
     client.write(msg + "finished");
@@ -20,6 +20,8 @@ function sendMsg(msg) {
 }
 
 function encAndSend(msg) {
+    currentReqId = msg['reqId'] = genReqId();
+
     aes.encrypt(aes_key, msg, sendMsg);
 }
 
@@ -33,14 +35,19 @@ function msgReceived(msg) {
 }
 
 function processMsg(msg) {
-    responseAction(msg);
-    responded = true;
+    var idMatch = msg['reqId'] === currentReqId;
+    currentReqId = "";
+
+    if (idMatch) {
+        responseAction(msg);
+    } else {
+        console.log("communications error");
+    }
 }
 
 function setResponseAction(action) {
-    if (responded) {
+    if (currentReqId === "") {
         responseAction = action;
-        responded = false;
         return true;
     }
 
@@ -122,7 +129,7 @@ function start() {
         let data = aes.hex2String(recv);
         if (data.search("finished") === data.length - 8) {
             msg_ += data.substring(0, data.length - 8);
-            processMsg(msg_);
+            msgReceived(msg_);
             msg_ = "";
         } else {
             msg_ += data;
