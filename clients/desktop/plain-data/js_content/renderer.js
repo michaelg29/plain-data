@@ -73,5 +73,6 @@ module.exports = {
     goto_pg,
     updateConfig,
     updateAllConfigs,
-    alert_message
+    alert_message,
+    ipcRenderer
 }
