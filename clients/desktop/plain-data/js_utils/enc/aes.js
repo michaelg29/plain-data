@@ -21,7 +21,7 @@ function generateVector() {
 }
 
 function encrypt(key, text, finished) {
-    var python = require('child_process').exec('python js_utils/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
+    var python = require('child_process').exec('python js_utils/enc/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
         finished(stdout);
     });
 }
