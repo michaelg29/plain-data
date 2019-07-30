@@ -24,11 +24,7 @@
         var username = jQuery('#username').val();
         var pwd = jQuery('#password').val();
 
-        if (account.login(username, pwd)) {
-
-        } else {
-            
-        }
+        account.login(username, pwd);
     });
 
     function createAccount() {
@@ -38,4 +34,8 @@
     function forgotPassword() {
         renderer.goto_pg('forgot_pwd');
     }
+
+    ipcRenderer.on('login:failed', () => {
+        renderer.alert_message("error", "Login Failed", "Incorrect Username or Password");
+    });
 </script>
