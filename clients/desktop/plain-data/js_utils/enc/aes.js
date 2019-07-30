@@ -18,13 +18,13 @@ function generateKey(size) {
 
 function encrypt(key, text, finished) {
     var python = require('child_process').exec('python js_utils/enc/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
-        finished(done);
+        finished(stdout.substring(2, stdout.length - 3));
     });
 }
 
 function decrypt(key, text, finished) {
     var python = require('child_process').exec('python js_utils/enc/aes.py DECRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
-        finished(stdout);
+        finished(stdout.substring(2, stdout.length - 3));
     });
 }
 
@@ -37,8 +37,8 @@ function hex2String(array) {
 }
 
 module.exports = {
-    generateKey: generateKey,
-    encrypt: encrypt,
-    decrypt: decrypt,
-    hex2String: hex2String,
+    generateKey,
+    encrypt,
+    decrypt,
+    hex2String,
 };
