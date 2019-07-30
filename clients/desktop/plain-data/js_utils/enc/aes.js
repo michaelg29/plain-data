@@ -2,7 +2,7 @@ const crypto = require('crypto');
 
 function generateKey(size) {
     var key = "";
-    var code = "\"";
+    var code = '"';
 
     // generate size characters by converting random ints [33, 126] into characters
     for (var i = 0; i < size; i++) {
@@ -18,12 +18,12 @@ function generateKey(size) {
 
 function encrypt(key, text, finished) {
     var python = require('child_process').exec('python js_utils/enc/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
-        finished(stdout);
+        finished(done);
     });
 }
 
 function decrypt(key, text, finished) {
-    var python = require('child_process').exec('python js_utils/aes.py DECRYPT ' + key + ' ' + text, function (error, stdout, stderr) {
+    var python = require('child_process').exec('python js_utils/enc/aes.py DECRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
         finished(stdout);
     });
 }
