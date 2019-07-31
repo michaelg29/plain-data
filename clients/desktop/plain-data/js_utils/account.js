@@ -1,4 +1,5 @@
-const client = require('./global/data_client');
+const config = require('./global/config');
+const client = require('electron').remote.getGlobal('client');
 
 const renderer = require('./../js_content/renderer');
 
@@ -7,17 +8,22 @@ function login(username, password) {
         "type": "account",
         "action": "login",
         "values": {
-            "username": username,
-            "password": password
+            "u": username,
+            "p": password
         }
     }
 
+    console.log("login");
     client.setResponseAction(loginResponse);
     client.encAndSend(JSON.stringify(req));
 }
 
 function loginResponse(msg) {
-    if (req['result']) {
+    console.log("lres:" + msg);
+    let res = JSON.parse(msg);
+
+    if (res['result'] === 'login-success') {
+        console.log("success: " + res);
         renderer.goto_pg('dashboard');
     } else {
         console.log('failed login');

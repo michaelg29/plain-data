@@ -2,7 +2,6 @@ import sys
 sys.path.append(r"C:\src\business-library\python")
 
 import json
-import pyaes
 
 from .dataclient import DataClient
 from .request import Request
@@ -50,6 +49,7 @@ class DataServer(TcpListener):
             self.validateClient(client, msg)
             return
 
+        msg = ''.join([chr(int(val)) for val in msg.split(',')])
         req = Request(msg, client)
         req.parse()
 
@@ -64,6 +64,7 @@ class DataServer(TcpListener):
             }
             """
             response = json.loads(msg)
+            print("received hello message")
 
             try:
                 client.name = response['name']
@@ -78,6 +79,7 @@ class DataServer(TcpListener):
                 "N": str(self.pubKey[1])
             }
             client.send(8192, json.dumps(response))
+            print('sent public key')
 
             client.validationStage = 1
         elif client.validationStage == 1:
@@ -89,14 +91,17 @@ class DataServer(TcpListener):
             }
             """
             response = json.loads(msg)
+            print("received aes key")
             try:
                 client.key = rsa.decrypt_(self.__privKey, response['shared_key'])
-                enc = response['enc_msg'][:-1].encode().decode('unicode-escape').encode('ISO-8859-1')
+                enc = ''.join([chr(val) for val in response['enc_msg'].values()])
 
                 dec = aes.decrypt(client.key, enc)
                 client.send(8192, dec, False)
+                print("sent decryption message")
 
                 client.validated = True
+                print("client validated")
             except Exception as e:
                 import traceback
                 exc_info = sys.exc_info()

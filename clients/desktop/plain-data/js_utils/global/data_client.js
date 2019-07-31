@@ -61,6 +61,7 @@ function validateServer(msg) {
                 // receive public key
                 response = JSON.parse(msg);
                 rsa_key = [ response['e'], response['N'] ];
+                console.log("received public key");
 
                 // generate aes key
                 aes_key = aes.generateKey(16);
@@ -71,6 +72,7 @@ function validateServer(msg) {
                 break;
             case 1:
                 // receive decrypted message
+                console.log("received decrypted message");
                 if (msg === msg_check) {
                     validated = true;
                     console.log("server validated");
@@ -99,9 +101,10 @@ function sendKey(encrypted) {
 }
 
 function sendValidationMsg(msg) {
-    response["enc_msg"] = String(msg).substring(2, msg.length - 2);
+    response["enc_msg"] = msg; 
 
     sendMsg(JSON.stringify(response));
+    console.log("sent validation message");
 
     validationStage++;
 }
@@ -120,13 +123,14 @@ function start() {
         };
 
         sendMsg(JSON.stringify(response));
+        console.log("sent hello message");
 
         validated = false;
         validationStage = 0;
     });
 
     client.on('data', function(recv) {
-        let data = aes.hex2String(recv);
+        let data = aes.decode(recv);
         if (data.search("finished") === data.length - 8) {
             msg_ += data.substring(0, data.length - 8);
             msgReceived(msg_);

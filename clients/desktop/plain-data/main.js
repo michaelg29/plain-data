@@ -8,6 +8,9 @@ app.setName("Plain Data");
 
 // script utils
 const client = require('./js_utils/global/data_client');
+global.client = client;
+
+const config = require('./js_utils/global/config');
 
 // script content
 const menubar = require('./js_content/menubar');
@@ -39,7 +42,7 @@ app.on('ready', function() {
     // quit app when closed
     mainWindow.on('closed', () => app.quit());
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 });
 
 // catch window ready
@@ -72,6 +75,6 @@ sendMsg = function(code, data) {
 };
 
 module.exports = {
-    sendAlert: this.sendAlert,
-    sendMsg: this.sendMsg,
+    sendAlert,
+    sendMsg,
 };
