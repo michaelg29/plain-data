@@ -61,20 +61,3 @@ app.on('before-quit', function() {
 app.on('quit', function() {
     
 });
-
-sendAlert = function(code) {
-    if (mainWindow) {
-        mainWindow.webContents.send(code);
-    }
-};
-
-sendMsg = function(code, data) {
-    if (mainWindow) {
-        mainWindow.webContents.send(code, data);
-    }
-};
-
-module.exports = {
-    sendAlert,
-    sendMsg,
-};
