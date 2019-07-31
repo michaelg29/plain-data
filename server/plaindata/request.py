@@ -21,6 +21,16 @@ class AccountActions:
     UPDATE = "update"
     FORGOT = "forgot"
 
+class BoardActions:
+    CREATE = "create"
+    UPDATE = "update"
+    COMMENT = "comment"
+
+class FileActions:
+    UPLOAD = "upload"
+    DOWNLOAD = "download"
+    EDIT = "edit"
+
 class Request:
     def __init__(self, body, sender):
         self.sender = sender
@@ -33,12 +43,33 @@ class Request:
 
     def setInvalid(self, result, reasons):
         self.set('response', result)
-        self.set('reasons', reasons)
+        self.response['reasons'].append(reasons)
+
+    def invalidType(self):
+        self.setInvalid('format-error', 'type:invalid')
+
+    def invalidAction(self):
+        self.setInvalid('format-error', 'action:invalid')
 
     def set(self, key, value):
         self.response[key] = value
 
     def parse(self):
+        """
+
+            sample request
+
+            {
+                "reqId": "reqId",
+                "type": "account"|"file"|"board",
+                "action": "action",
+                "values": {
+
+                }
+            }
+
+        """
+
         try:
             self.json_body = json.loads(self.body)
             
@@ -46,6 +77,7 @@ class Request:
 
             self.type = self.get('type')
             self.action = self.get('action')
+            self.reasons = []
 
             if self.type == Types.ACCOUNT:
                 if self.action == AccountActions.LOGIN:
@@ -62,14 +94,37 @@ class Request:
                             "f": results[2],
                             "e": results[3]
                         }
+                        self.set('values', user_values)
                     else:
                         self.setInvalid('login-fail', [])
+                elif self.action == AccountActions.CREATE:
+                    pass
+                elif self.action == AccountActions.FORGOT:
+                    pass
+                elif self.action == AccountActions.UPDATE:
+                    pass
+                else:
+                    self.invalidAction()
             elif self.type == Types.BOARD:
-                pass
+                if self.action == BoardActions.CREATE:
+                    pass
+                elif self.action == BoardActions.UPDATE:
+                    pass
+                elif self.action == BoardActions.COMMENT:
+                    pass
+                else:
+                    self.invalidAction()
             elif self.type == Types.FILE:
-                pass
+                if self.action == FileActions.UPLOAD:
+                    pass
+                elif self.action == FileActions.EDIT:
+                    pass
+                elif self.action == FileActions.DOWNLOAD:
+                    pass
+                else:
+                    self.invalidAction()
             else:
-                self.setInvalid('format-error', [ 'type:invalid' ])
+                self.invalidType()
 
             self.sender.encAndSend(json.dumps(self.response))
 
