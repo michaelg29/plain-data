@@ -8,7 +8,7 @@ import mundusinvicte.security.aes as aes
 from .data.local import localData
 from .utils import padNumber
 
-from .models.user import validateUser
+from .models.user import validateUser, createUser, setFlag, saveUser
 
 class Types:
     ACCOUNT = "account"
@@ -41,22 +41,31 @@ class Request:
     def get(self, key):
         return self.json_body[key]
 
-    def setInvalid(self, result, reasons):
-        self.set('response', result)
-        self.response['reasons'].append(reasons)
+    def getClientVal(self, key):
+        return self.json_body['values'][key]
+
+    def setSuccess(self):
+        self.set('response', True)
+
+    def setInvalid(self, reason):
+        self.set('response', False)
+        self.response['reasons'].append(reason)
+
+    def setInvalidWithMultipleErrors(self, reasons):
+        for reason in reasons:
+            self.setInvalid(reason)
 
     def invalidType(self):
-        self.setInvalid('format-error', 'type:invalid')
+        self.setInvalid('format:type:invalid')
 
     def invalidAction(self):
-        self.setInvalid('format-error', 'action:invalid')
+        self.setInvalid('format:action:invalid')
 
     def set(self, key, value):
         self.response[key] = value
 
     def parse(self):
         """
-
             sample request
 
             {
@@ -67,7 +76,6 @@ class Request:
 
                 }
             }
-
         """
 
         try:
@@ -81,13 +89,13 @@ class Request:
 
             if self.type == Types.ACCOUNT:
                 if self.action == AccountActions.LOGIN:
-                    uname = self.get('values')['u']
-                    pwd = self.get('values')['p']
+                    uname = self.getClientVal('u')
+                    pwd = self.getClientVal('p')
 
                     results = validateUser(uname, pwd)
 
                     if results:
-                        self.set('result', 'login-success')
+                        self.setSuccess()
                         user_values = {
                             "i": results[0],
                             "l": results[1],
@@ -96,13 +104,49 @@ class Request:
                         }
                         self.set('values', user_values)
                     else:
-                        self.setInvalid('login-fail', [])
+                        self.setInvalid('login:invalid')
                 elif self.action == AccountActions.CREATE:
-                    pass
+                    user_ = {
+                        "LastName": self.getClientVal('l'),
+                        "FirstName": self.getClientVal('f'),
+                        "Username": self.getClientVal('u'),
+                        "Password": self.getClientVal('p'),
+                        "Email": self.getClientVal('e')
+                    }
+
+                    results = createUser(user_)
+
+                    if results['result']:
+                        self.setSuccess()
+                        self.set('values', { 'i' : results['id'] })
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 elif self.action == AccountActions.FORGOT:
-                    pass
+                    id = self.getClientVal('i')
+                    email = self.getClientVal('e')
+
+                    results = setFlag(id, email, 'password:forgot')
+
+                    if results['result']:
+                        self.setSuccess()
+                        # TODO: Send email to user
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 elif self.action == AccountActions.UPDATE:
-                    pass
+                    user_ = {
+                        "LastName": self.getClientVal('l'),
+                        "FirstName": self.getClientVal('f'),
+                        "Username": self.getClientVal('u'),
+                        "Password": self.getClientVal('p'),
+                        "Email": self.getClientVal('e')
+                    }
+
+                    results = saveUser(user_)
+
+                    if results['result']:
+                        self.setSuccess()
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 else:
                     self.invalidAction()
             elif self.type == Types.BOARD:

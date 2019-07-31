@@ -18,14 +18,14 @@ def validateNewData(user):
 
     if check:
         ret['result'] = False
-        ret['reasons'].append('username.exists')
+        ret['reasons'].append('username:exists')
 
     # validate email
     check = sql.sql_executeReadQuery(f"select Email from dbo.Users where Email = '{user['Email']}'")
 
     if check:
         ret['result'] = False
-        ret['reasons'].append('email.exists')
+        ret['reasons'].append('email:exists')
 
     return ret
 
@@ -52,27 +52,27 @@ def validateData(user):
             symbol_count += 1
         else:
             ret['result'] = False
-            ret['reasons'].append('pwd.invalid_char')
+            ret['reasons'].append('pwd:invalid_char')
 
     if len(user['Password']) < 8:
         ret['result'] = False
-        ret['reasons'].append('pwd.short')
+        ret['reasons'].append('pwd:short')
 
     if upper_count < 1:
         ret['result'] = False
-        ret['reasons'].append('pwd.upper')
+        ret['reasons'].append('pwd:upper')
 
     if lower_count < 1:
         ret['result'] = False
-        ret['reasons'].append('pwd.lower')
+        ret['reasons'].append('pwd:lower')
 
     if digit_count < 1:
         ret['result'] = False
-        ret['reasons'].append('pwd.digit')
+        ret['reasons'].append('pwd:digit')
 
     if symbol_count < 1:
         ret['result'] = False
-        ret['reasons'].append('pwd.symbol')
+        ret['reasons'].append('pwd:symbol')
 
     return ret
 
@@ -103,5 +103,27 @@ def saveUser(user):
             print(e)
             ret['result'] = False
             ret['reasons'].append('cnxn')
+
+    return ret
+
+def setFlag(id, email, flag):
+    ret = {
+        "result": True,
+        "reasons": []
+    }
+
+    try:
+        results = sql.sql_executeReadQuery(f"select Flags from dbo.Users where ID = {id} and Email = '{email}'")
+        if results:
+            flag += ',' + results[0][0]
+            sql.sql_executeWriteQuery(f"update dbo.Users set Flags = '{flag}'")
+        else:
+            ret['result'] = False
+            ret['reasons'].append('user:noexist')
+
+    except Exception as e:
+        print(e)
+        ret['result'] = False
+        ret['reasons'].append('cnxn')
 
     return ret
