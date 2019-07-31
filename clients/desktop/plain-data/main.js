@@ -42,12 +42,12 @@ app.on('ready', function() {
     // quit app when closed
     mainWindow.on('closed', () => app.quit());
 
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 });
 
 // catch window ready
 ipcMain.on('window:ready', function(e) {
-    sendMsg('page:go', DEFAULT_PAGE);
+    mainWindow.webContents.send('page:go', DEFAULT_PAGE);
 
     client.start();
 });

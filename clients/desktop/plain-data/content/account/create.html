@@ -1,1 +1,62 @@
-<h1>Create account</h1>
+<section>
+    <form id="create-form" style="margin-top: 100px">
+        <h1>Create Account</h1>
+
+        <div class="form-item">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName"/>
+        </div>
+
+        <div class="form-item">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName"/>
+        </div>
+
+        <div class="form-item">
+            <label for="username">Username</label>
+            <input type="text" id="username"/>
+        </div>
+
+        <div class="form-item">
+            <label for="email">Email</label>
+            <input type="text" id="email"/>
+        </div>
+
+        <div class="form-item">
+            <label for="pwd">Password</label>
+            <input type="password" id="pwd"/>
+        </div>
+
+        <a onclick="create()" class="a-btn">Create Account</a>
+
+        <div class="form-other-options">
+            <a onclick="login()">Already have an account?</a>
+        </div>
+    </form>
+</section>
+
+<script>
+    const account = require('./../js_utils/account');
+
+    function create() {
+        var lname = jQuery('#lastName').val();
+        var fname = jQuery('#firstName').val();
+        var uname = jQuery('#username').val();
+        var email = jQuery('#email').val();
+        var pwd = jQuery('#pwd').val();
+
+        let user = {
+            "l": lname,
+            "f": fname,
+            "u": uname,
+            "p": pwd,
+            "e": email
+        }
+
+        account.createAccount(user);
+    }
+
+    function login() {
+        renderer.goto_pg('login');
+    }
+</script>

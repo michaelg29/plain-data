@@ -37,11 +37,23 @@ ipcRenderer.on('page:go', function(e, route) {
 // ============================= ALERT ==============================
 function alert_message(type, title, message) {
     dialog.showMessageBox({
-        type: type,
+        type: type, // none|info|error|question|warning
         buttons: [ 'OK' ],
         title: title,
         message: message,
     });
+}
+
+function sendAlert(alert) {
+    ipcRenderer.send(alert);
+}
+
+function sendData(message, data) {
+    ipcRenderer.send(message, data);
+}
+
+function setResponse(trigger, response) {
+    ipcRenderer.on(trigger, response);
 }
 
 // ============================== CONFIG VALUES ==========================
@@ -74,5 +86,7 @@ module.exports = {
     updateConfig,
     updateAllConfigs,
     alert_message,
-    ipcRenderer
+    sendAlert,
+    sendData,
+    setResponse
 }
