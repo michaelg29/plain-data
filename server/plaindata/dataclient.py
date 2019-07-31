@@ -10,5 +10,5 @@ class DataClient(TcpClient):
         super().__init__(socket, addr)
         self.validated = False
 
-    def sendEnc(self, msg):
+    def encAndSend(self, msg):
         self.send(8192, aes.encrypt(self.key, msg), False)

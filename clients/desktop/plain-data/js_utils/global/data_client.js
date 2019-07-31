@@ -9,6 +9,7 @@ var validationStage;
 var rsa_key;
 var aes_key;
 var msg_ = "";
+var msg = [];
 var response;
 var msg_check;
 var responseAction = validateServer;
@@ -21,8 +22,9 @@ function sendMsg(msg) {
 
 function encAndSend(msg) {
     currentReqId = msg['reqId'] = genReqId();
+    console.log("reqid:",currentReqId);
 
-    aes.encrypt(aes_key, msg, sendMsg);
+    aes.encrypt(aes_key, JSON.stringify(msg), sendMsg);
 }
 
 function msgReceived(msg) {
@@ -35,6 +37,11 @@ function msgReceived(msg) {
 }
 
 function processMsg(msg) {
+    if (validated) {
+        console.log("msg:",msg)
+        msg = JSON.parse(msg);
+    }
+
     var idMatch = msg['reqId'] === currentReqId;
     currentReqId = "";
 
@@ -130,13 +137,29 @@ function start() {
     });
 
     client.on('data', function(recv) {
-        let data = aes.decode(recv);
-        if (data.search("finished") === data.length - 8) {
-            msg_ += data.substring(0, data.length - 8);
-            msgReceived(msg_);
-            msg_ = "";
+        if (validated) {
+            var last8 = [];
+            for (var i = recv.length - 8; i < recv.length; i++)
+                last8.push(recv[i]);
+
+            if (aes.decode(last8) === "finished") {
+                for (var i = 0; i < recv.length - 8; i++)
+                    msg.push(recv[i]);
+                msgReceived(msg);
+                msg = [];
+            } else {
+                for (var i = 0; i < recv.length; i++)
+                    msg.push(recv[i]);
+            }
         } else {
-            msg_ += data;
+            let data = aes.decode(recv);
+            if (data.search("finished") === data.length - 8) {
+                msg_ += data.substring(0, data.length - 8);
+                msgReceived(msg_);
+                msg_ = "";
+            } else {
+                msg_ += data;
+            }
         }
     });
 

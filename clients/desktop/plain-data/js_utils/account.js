@@ -15,15 +15,14 @@ function login(username, password) {
 
     console.log("login");
     client.setResponseAction(loginResponse);
-    client.encAndSend(JSON.stringify(req));
+    client.encAndSend(req);
 }
 
 function loginResponse(msg) {
-    console.log("lres:" + msg);
-    let res = JSON.parse(msg);
+    console.log('login res',msg)
 
-    if (res['result'] === 'login-success') {
-        console.log("success: " + res);
+    if (msg['result'] === 'login-success') {
+        console.log("success");
         renderer.goto_pg('dashboard');
     } else {
         console.log('failed login');

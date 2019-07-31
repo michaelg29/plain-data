@@ -24,9 +24,7 @@ class AccountActions:
 class Request:
     def __init__(self, body, sender):
         self.sender = sender
-        print("enc:",body)
         self.body = aes.decrypt(self.sender.key, body)
-        print("dec:",self.body)
 
         self.response = {}
         
@@ -51,7 +49,6 @@ class Request:
 
             if self.type == Types.ACCOUNT:
                 if self.action == AccountActions.LOGIN:
-                    print('login request')
                     uname = self.get('values')['u']
                     pwd = self.get('values')['p']
 
@@ -74,7 +71,7 @@ class Request:
             else:
                 self.setInvalid('format-error', [ 'type:invalid' ])
 
-            self.sendEnc(json.dumps(self.response))
+            self.sender.encAndSend(json.dumps(self.response))
 
         except:
             import traceback
