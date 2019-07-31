@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const aesjs = require('aes-js');
 
 function generateKey(size) {
     var key = "";
@@ -16,29 +16,53 @@ function generateKey(size) {
     return key;
 }
 
+// function encrypt(key, text, finished) {
+//     var python = require('child_process').exec('python js_utils/enc/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
+//         console.log("Key:",key)
+//         console.log("text:",text)
+//         console.log("enc:",typeof(stdout),stdout.substring(2, stdout.length - 3))
+//         decrypt(key, stdout.substring(2, stdout.length - 3), () => {})
+//         finished(stdout.substring(2, stdout.length - 3));
+//     });
+// }
+
+// function decrypt(key, text, finished) {
+//     var python = require('child_process').exec('python js_utils/enc/aes.py DECRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
+//         console.log('dec:',typeof(stdout), stdout);
+//         finished(stdout.substring(2, stdout.length - 3));
+//     });
+// }
+
 function encrypt(key, text, finished) {
-    var python = require('child_process').exec('python js_utils/enc/aes.py ENCRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
-        finished(stdout.substring(2, stdout.length - 3));
-    });
+    var aesCtr = new aesjs.ModeOfOperation.ctr(encode(key));
+    var textBytes = aesjs.utils.utf8.toBytes(text);
+
+    var encryptedBytes = aesCtr.encrypt(textBytes);
+
+    finished(encryptedBytes);
 }
 
-function decrypt(key, text, finished) {
-    var python = require('child_process').exec('python js_utils/enc/aes.py DECRYPT "' + key + '" "' + text + '"', function (error, stdout, stderr) {
-        finished(stdout.substring(2, stdout.length - 3));
-    });
+function decrypt(key, encryptedBytes, finished) {
+    var aesCtr = new aesjs.ModeOfOperation.ctr(encode(key));
+    var decryptedBytes = aesCtr.decrypt(encryptedBytes);
+
+    var decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
+
+    finished(decryptedText);
 }
 
-function hex2String(array) {
-    var result = "";
-    for (var i = 0; i < array.length; i++) {
-        result += String.fromCharCode(parseInt(array[i]));
-    }
-    return result;
+function decode(bytes) {
+    return aesjs.utils.utf8.fromBytes(bytes);
+}
+
+function encode(text) {
+    return aesjs.utils.utf8.toBytes(text);
 }
 
 module.exports = {
     generateKey,
     encrypt,
     decrypt,
-    hex2String,
+    decode,
+    encode
 };
