@@ -95,7 +95,7 @@ class Request:
 
                     results = validateUser(uname, pwd)
 
-                    if results['result']:
+                    if results:
                         self.setSuccess()
                         user_values = {
                             "i": results[0],
