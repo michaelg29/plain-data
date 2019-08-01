@@ -1,8 +1,7 @@
-const config = require('./global/config');
+const config = require('../global/config');
 const client = require('electron').remote.getGlobal('client');
-const main = require('./../main');
 
-const renderer = require('./../js_content/renderer');
+const renderer = require('../../js_content/renderer');
 
 let user_ = {};
 
@@ -23,7 +22,7 @@ function login(username, password) {
 }
 
 function loginResponse(msg) {
-    if (msg['result']) {
+    if (msg['response']) {
         renderer.goto_pg('dashboard');
         renderer.alert_message('info', 'Logged in', 'You have successfully logged in!');
         global.user = user_;
@@ -49,7 +48,7 @@ function createAccount(user) {
 }
 
 function createAccountResponse(msg) {
-    if (msg['result']) {
+    if (msg['response']) {
         renderer.goto_pg('dashboard');
         renderer.alert_message('info', 'Created account', 'You have successfully created an account!');
         global.user = user_;
