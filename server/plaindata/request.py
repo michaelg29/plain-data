@@ -85,7 +85,7 @@ class Request:
 
             self.type = self.get('type')
             self.action = self.get('action')
-            self.reasons = []
+            self.set("reasons", [])
 
             if self.type == Types.ACCOUNT:
                 if self.action == AccountActions.LOGIN:
