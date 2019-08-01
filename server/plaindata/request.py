@@ -9,6 +9,7 @@ from .data.local import localData
 from .utils import padNumber
 
 from .models.user import validateUser, createUser, setFlag, saveUser
+from .models.file import upload
 
 class Types:
     ACCOUNT = "account"
@@ -94,7 +95,7 @@ class Request:
 
                     results = validateUser(uname, pwd)
 
-                    if results:
+                    if results['result']:
                         self.setSuccess()
                         user_values = {
                             "i": results[0],
@@ -104,7 +105,7 @@ class Request:
                         }
                         self.set('values', user_values)
                     else:
-                        self.setInvalid('login:invalid')
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 elif self.action == AccountActions.CREATE:
                     user_ = {
                         "LastName": self.getClientVal('l'),
@@ -160,7 +161,12 @@ class Request:
                     self.invalidAction()
             elif self.type == Types.FILE:
                 if self.action == FileActions.UPLOAD:
-                    pass
+                    results = upload(self.get('values'))
+
+                    if results['result']:
+                        self.setSuccess()
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 elif self.action == FileActions.EDIT:
                     pass
                 elif self.action == FileActions.DOWNLOAD:
@@ -176,35 +182,3 @@ class Request:
             import traceback
             exc_info = sys.exc_info()
             traceback.print_exception(*exc_info)
-
-# if self.type == 'upload-file':
-#     print('upload file request')
-#     try:
-#         self.contents = self.get('contents')
-
-#         atts = {
-#             "filetype": self.get('filetype'),
-#             "filename": self.get('filename'),
-#             "author": self.get('author'),
-#             "id": padNumber(0, 6),
-#         }
-
-#         if len(localData.files) != 0:
-#             atts['id'] = padNumber(int(localData.files[-1]["id"]) + 1, 6)
-
-#         localData.files.append(atts)
-
-#         txt_types = [ "txt" ]
-#         b_types = [ "pdf" ]
-
-#         localData.writeFile(atts['id'] + '.' + atts['filetype'], atts['filetype'] in b_types)
-#     except Exception as e:
-#         pass
-#     finally:
-#         data.saveFiles()
-# elif self.type == 'download-file':
-#     pass
-# elif self.type == 'request':
-#     pass
-# elif self.type == 'send':
-#     pass

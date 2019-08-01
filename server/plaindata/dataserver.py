@@ -30,6 +30,7 @@ class DataServer(TcpListener):
         print("Server started at", self.ipAddr, "on port", self.port)
         print(r"Type 'stop' to quit")
 
+        localData.loadManifest()
         sql.sql_init()
 
     def clientConnected(self, client):
@@ -118,5 +119,6 @@ class DataServer(TcpListener):
             cmd = input()
             if cmd == "stop":
                 print("Server shutting down")
+                localData.saveManifest()
                 sql.sql_cleanup()
                 exit()

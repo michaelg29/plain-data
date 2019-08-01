@@ -2,23 +2,44 @@ import json
 import os
 
 class localData:
-    files = []
+    files = {}
+    users = {}
 
-    def loadFiles():
+    def loadManifest():
         try:
             with open('data/files/manifest.json', 'r') as json_file:
-                data.files = json.load(json_file)
+                localData.files = json.load(json_file)
         except:
-            data.files = []
+            localData.files = {}
 
-    def saveFiles():
-        with open('data/files/manifest.json', 'w') as json_file:
-            json.dump(data.files, json_file, indent=4)
+        try:
+            with open('data/files/user_manifest.json', 'r') as json_file:
+                localData.users = json.load(json_file)
+        except:
+            localData.users = {}
 
-    def writeFile(path, content, isBinary = False):
-        if isBinary:
-            with open("data/files/" + path, 'w') as f:
-                f.write(content)
+    def addToManifest(uid, fid, fileAtts):
+        localData.files[fid] = fileAtts
+
+        uid = str(uid)
+        
+        if uid in localData.users:
+            localData.users[uid].append(fid)
         else:
-            with open("data/files/" + path, mode='wb') as out:
-                out.write(content.encode('latin1'))
+            localData.users[uid] = [ fid ]
+
+    def updateManifest(uid, fileid, fileAtts):
+        pass
+
+    def generateFileId():
+        if len(localData.files.keys()) == 0:
+            return 0
+        else:
+            return int(list(localData.files.keys())[-1]) + 1
+
+    def saveManifest():
+        with open('data/files/manifest.json', 'w') as json_file:
+            json.dump(localData.files, json_file, indent=4)
+
+        with open('data/files/user_manifest.json', 'w') as json_file:
+            json.dump(localData.users, json_file, indent=4)
