@@ -3,7 +3,8 @@ insert into dbo.Users values (
 	'Michael',
 	'Admin',
 	'AdmiN_123',
-	'michaelgriecocoding@gmail.com'
+	'michaelgriecocoding@gmail.com',
+	''
 )
 
 select * from dbo.Users
