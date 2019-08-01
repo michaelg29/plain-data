@@ -48,6 +48,7 @@ form label, form input {
 }
 
 form input {
+    margin-left: 30px;
     border: 0;
     border-bottom: 3px solid var(--main-bg-color);
     transition: 500ms;
