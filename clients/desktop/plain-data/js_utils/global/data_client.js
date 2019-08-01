@@ -22,7 +22,6 @@ function sendMsg(msg) {
 
 function encAndSend(msg) {
     currentReqId = msg['reqId'] = genReqId();
-    console.log("reqid:",currentReqId);
 
     aes.encrypt(aes_key, JSON.stringify(msg), sendMsg);
 }
@@ -37,16 +36,13 @@ function msgReceived(msg) {
 }
 
 function processMsg(msg) {
-    if (validated) {
-        console.log("msg:",msg)
-        msg = JSON.parse(msg);
-    }
+    let json_parse = validated ? JSON.parse(msg) : msg;
 
-    var idMatch = msg['reqId'] === currentReqId;
+    var idMatch = json_parse['reqId'] === currentReqId;
     currentReqId = "";
 
     if (idMatch || !validated) {
-        responseAction(msg);
+        responseAction(json_parse);
     } else {
         console.log("communications error");
     }
