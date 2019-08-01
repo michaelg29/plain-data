@@ -10,8 +10,6 @@ app.setName("Plain Data");
 const client = require('./js_utils/global/data_client');
 global.client = client;
 
-const config = require('./js_utils/global/config');
-
 // script content
 const menubar = require('./js_content/menubar');
 
@@ -24,6 +22,10 @@ const DEFAULT_PAGE = "login";
 
 // wait for app to be ready
 app.on('ready', function() {
+    global.online = false;
+    global.loggedIn = { val: false };
+    global.user = { atts: {} };
+
     // create window
     mainWindow = new BrowserWindow({
         width: 1200,
@@ -43,6 +45,7 @@ app.on('ready', function() {
     mainWindow.on('closed', () => app.quit());
 
     mainWindow.webContents.openDevTools();
+    mainWindow.webContents.send('update:configs_all');
 });
 
 // catch window ready

@@ -57,7 +57,6 @@ function setResponse(trigger, response) {
 }
 
 // ============================== CONFIG VALUES ==========================
-const config = require('../js_utils/global/config');
 
 function updateAllConfigs() {
     updateConfig("connection");
@@ -67,19 +66,30 @@ function updateAllConfigs() {
 function updateConfig(property) {
     switch (property) {
         case "connection":
-            document.querySelector("#footer-property-connection").innerHTML = "Connection Status: " + (config.online ? "Online" : "Offline");
+            document.querySelector("#footer-property-connection").innerHTML = "Connection Status: " + (electron.remote.getGlobal('online') ? "Online" : "Offline");
             break;
 
         case "account":
-                document.querySelector("#footer-property-account").innerHTML = "Account Status: " + (config.loggedIn ? "Logged In" : "Not Logged In");
+            console.log(electron.remote.getGlobal('loggedIn'));
+            document.querySelector("#footer-property-account").innerHTML = "Account Status: " + (electron.remote.getGlobal('loggedIn').val ? "Logged In" : "Not Logged In");
             break;
     };
 }
+
+ipcRenderer.on('update:config', function(e, config) {
+    updateConfig(config);
+});
+
+ipcRenderer.on('update:configs_all', () => updateAllConfigs());
 
 // ============================== RUNTIME ========================
 
 // on ready
 ipcRenderer.send('window:ready');
+
+global.updateConfig = function(value) {
+    updateConfig(value);
+}
 
 module.exports = {
     goto_pg,

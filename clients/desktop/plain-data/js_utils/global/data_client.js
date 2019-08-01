@@ -1,6 +1,7 @@
 const rsa = require('../enc/rsa');
 const aes = require('../enc/aes');
 var net = require('net');
+const window = require('electron').BrowserWindow;
 
 var client;
 
@@ -79,6 +80,8 @@ function validateServer(msg) {
                 if (msg === msg_check) {
                     validated = true;
                     console.log("server validated");
+                    global.online = true;
+                    window.getFocusedWindow().webContents.send('update:config', 'connection');
                 } else {
                     client.destroy();
                     console.log("server failed validation");
@@ -161,6 +164,9 @@ function start() {
 
     client.on('close', function() {
         console.log('disconnected');
+        global.online = false;
+        if (window.getFocusedWindow())
+            window.getFocusedWindow().webContents.send('update:config', 'connection');
     });
 }
 

@@ -1,5 +1,5 @@
-const config = require('../global/config');
-const client = require('electron').remote.getGlobal('client');
+const remote = require('electron').remote;
+const client = remote.getGlobal('client');
 
 const renderer = require('../../js_content/renderer');
 
@@ -25,7 +25,13 @@ function loginResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('dashboard');
         renderer.alert_message('info', 'Logged in', 'You have successfully logged in!');
-        global.user = user_;
+        user_['ID'] = msg['values']['i'];
+
+        remote.getGlobal('user').atts = user_;
+
+        remote.getGlobal('loggedIn').val = true;
+        console.log(electron.remote.getGlobal('loggedIn'));
+        renderer.updateConfig('account');
     } else {
         renderer.sendData('login:failed', msg['reasons']);
     }
@@ -51,7 +57,9 @@ function createAccountResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('dashboard');
         renderer.alert_message('info', 'Created account', 'You have successfully created an account!');
-        global.user = user_;
+        user_['ID'] = msg['values']['i'];
+        remote.getGlobal('user').atts = user_;
+        remote.getGlobal('loggedIn').val = true;
     } else {
         renderer.sendData('create:failed', msg['reasons']);
     }
