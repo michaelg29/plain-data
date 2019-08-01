@@ -82,7 +82,7 @@ def createUser(user):
     # add user to table
     if ret['result']:
         try:
-            sql.sql_executeWriteQuery(f"insert into dbo.Users values ('{user['LastName']}','{user['FirstName']}','{user['Username']}','{user['Password']}','{user['Email']}')")
+            sql.sql_executeWriteQuery(f"insert into dbo.Users values ('{user['LastName']}','{user['FirstName']}','{user['Username']}','{user['Password']}','{user['Email']}', '')")
 
             # get created id
             ret['id'] = sql.sql_executeReadQuery(f"select ID from dbo.Users where Username = '{user['Username']}'")[0][0]
