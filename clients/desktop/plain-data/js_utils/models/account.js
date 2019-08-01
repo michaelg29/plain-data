@@ -30,7 +30,6 @@ function loginResponse(msg) {
         remote.getGlobal('user').atts = user_;
 
         remote.getGlobal('loggedIn').val = true;
-        console.log(electron.remote.getGlobal('loggedIn'));
         renderer.updateConfig('account');
     } else {
         renderer.sendData('login:failed', msg['reasons']);

@@ -1,18 +1,33 @@
 from ..data.local import localData
 
+import json
+
 def upload(atts):
-    fid = localData.generateFileId()
+	ret = {
+		"result": True,
+		"reasons": []
+	}
 
-    writeFile(f"{fid}.{atts['filetype']}", atts['content'], atts['bytes'])
+	try:
+		fid = localData.generateFileId()
 
-    atts.pop('content')
-    
-    localData.addToManifest(atts['user'], fid, atts)
+		writeFile(f"{fid}.{atts['filetype']}", atts['content'], atts['bytes'])
+
+		atts.pop('content')
+		
+		localData.addToManifest(atts['user'], fid, atts)
+	except:
+		ret['reasons'].append('file:invalid')
+
+	return ret
 
 def writeFile(path, content, isBinary = False):
-    if isBinary:
-        with open("data/files/" + path, mode='wb') as out:
-            out.write(content.encode('latin1'))
-    else:
-       with open("data/files/" + path, 'w') as f:
-            f.write(content)
+	content = content['data']
+	content = ''.join([chr(int(val)) for val in content])
+
+	if isBinary:
+		with open("data/files/" + path, mode='wb') as out:
+			out.write(content.encode('latin1'))
+	else:
+		with open("data/files/" + path, 'w') as f:
+			f.write(content)

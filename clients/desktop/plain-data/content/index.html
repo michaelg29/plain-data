@@ -22,8 +22,8 @@
 
         <div id="footer-container">
             <ul id="properties-list">
-                <li id="footer-property-connection">Connection Status: </li>
-                <li id="footer-property-account">Account Status: </li>
+                <li id="footer-property-connection">Connection Status: Offline</li>
+                <li id="footer-property-account">Account Status: Not Logged In</li>
             </ul>
         </div>
     </section>
@@ -31,12 +31,14 @@
     <script>
         const electron = require('electron');
         const { ipcRenderer } = electron;
+        const dialog = electron.remote.dialog;
         
         const jQuery = require('jquery');
 
         const renderer = require('./../js_content/renderer');
 
-        const account = require('./../js_utils/models/account.js');
+        const account = require('./../js_utils/models/account');
+        const file = require('./../js_utils/models/file');
     </script>
 </body>
 </html>

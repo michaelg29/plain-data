@@ -1,0 +1,72 @@
+<section>
+    <form id="upload-form" style="margin-top: 100px">
+        <h1>Upload File</h1>
+
+        <div class="form-item">
+            <label for="author">Author</label>
+            <input type="text" id="author" value="Author"/>
+        </div>
+
+        <div class="form-item">
+            <label for="title">Title</label>
+            <input type="text" id="title" value="Title"/>
+        </div>
+
+        <div class="form-item">
+            <label for="category">Category</label>
+            <input type="text" id="category" value="Category"/>
+        </div>
+
+        <div class="form-item">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" value="Tags"/>
+        </div>
+
+        <div class="form-item">
+            <label class="a-btn" onclick="openFileWindow()">Select File</label>
+            <span id="file" style="font-style: italic;">C:\Users\Michael Grieco\Downloads\license.pdf</span>
+        </div>
+
+        <a onclick="upload()" class="a-btn">Upload File</a>
+
+        <div class="form-other-options">
+            <a onclick="dashboard()">Cancel</a>
+        </div>
+    </form>
+</section>
+
+<script>
+    function upload() {
+        var filepath = document.querySelector('#file').innerHTML;
+
+        let atts = {
+            "author": jQuery('#author').val(),
+            "title": jQuery('#title').val(),
+            "category": jQuery('#category').val(),
+            "tags": jQuery('#tags').val(),
+            "filepath": filepath
+        };
+
+        var dotIdx = filepath.lastIndexOf('.');
+        var slashIdx = filepath.lastIndexOf('\\');
+
+        atts['filename'] = filepath.substring(slashIdx + 1, dotIdx);
+        atts['filetype'] = filepath.substring(dotIdx + 1);
+
+        file.upload(atts);
+    }
+
+    function openFileWindow() {
+        dialog.showOpenDialog({
+            title: "Select a file to upload",
+            defaultPath: electron.remote.app.getPath('home'),
+            properties: [ "openFile" ]
+        }, (filePath) => {
+            document.querySelector('#file').innerHTML = filePath;
+        });
+    }
+
+    function cancel() {
+        renderer.goto_pg("dashboard");
+    }
+</script>

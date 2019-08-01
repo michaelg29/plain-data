@@ -21,7 +21,8 @@ const routes = {
     "dashboard": "dashboard.html",
     "login": "account/login.html",
     "create_account": "account/create.html",
-    "forgot_pwd": "account/forgot.html"
+    "forgot_pwd": "account/forgot.html",
+    "file_upload": "files/upload.html"
 }
 
 // load html content from page
@@ -70,7 +71,6 @@ function updateConfig(property) {
             break;
 
         case "account":
-            console.log(electron.remote.getGlobal('loggedIn'));
             document.querySelector("#footer-property-account").innerHTML = "Account Status: " + (electron.remote.getGlobal('loggedIn').val ? "Logged In" : "Not Logged In");
             break;
     };
