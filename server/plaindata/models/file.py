@@ -45,22 +45,18 @@ def search(atts):
 
 		if 'title' in atts:
 			if atts['title'] not in file['title']:
-				matches = False
 				continue
 		if 'author' in atts:
 			if atts['author'] != file['author']:
-				matches = False
 				continue
 		if 'filetype' in atts:
 			if atts['filetype'] != file['filetype']:
-				matches = False
 				continue
 		if 'category' in atts:
 			if atts['category'] != file['category']:
-				matches = False
 				continue
 		if 'tags' in atts:
-			tags = atts['tags'].separate('|')
+			tags = atts['tags'].separate(',')
 			for tag in tags:
 				if tag not in file['tags']:
 					matches = False
