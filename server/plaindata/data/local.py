@@ -4,6 +4,7 @@ import os
 class localData:
     files = {}
     users = {}
+    boards = {}
 
     def loadManifest():
         try:
@@ -17,6 +18,12 @@ class localData:
                 localData.users = json.load(json_file)
         except:
             localData.users = {}
+
+        try:
+            with open('data/boards/user_manifest.json', 'r') as json_file:
+                localData.boards = json.load(json_file)
+        except:
+            localData.boards = {}
 
     def addToManifest(uid, fid, fileAtts):
         localData.files[fid] = fileAtts
@@ -43,3 +50,6 @@ class localData:
 
         with open('data/files/user_manifest.json', 'w') as json_file:
             json.dump(localData.users, json_file, indent=4)
+
+        with open('data/boards/user_manifest.json', 'w') as json_file:
+            json.dump(localData.boards, json_file, indent=4)
