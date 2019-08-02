@@ -10,6 +10,7 @@ from .utils import padNumber
 
 from .models.user import validateUser, createUser, setFlag, saveUser
 from .models.file import upload, download, search
+from .models.board import createBoard
 
 class Types:
     ACCOUNT = "account"
@@ -153,11 +154,22 @@ class Request:
                     self.invalidAction()
             elif self.type == Types.BOARD:
                 if self.action == BoardActions.CREATE:
-                    pass
+                    results = createBoard(self.get('values'))
+
+                    if results['result']:
+                        self.setSuccess()
+                        self.set('values', { 'id': results['id'] })
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 elif self.action == BoardActions.UPDATE:
                     pass
                 elif self.action == BoardActions.COMMENT:
-                    pass
+                    results = createBoard(self.get('values'))
+
+                    if results['result']:
+                        self.setSuccess()
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 else:
                     self.invalidAction()
             elif self.type == Types.FILE:
