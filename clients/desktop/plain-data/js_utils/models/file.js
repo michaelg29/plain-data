@@ -69,6 +69,26 @@ function uploadResponse(msg) {
     }
 }
 
+function search(atts) {
+    let req = {
+        "type": "file",
+        "action": "search",
+        "values": atts
+    }
+
+    client.setResponseAction(searchResponse);
+    client.encAndSend(req);
+}
+
+function searchResponse(msg) {
+    if (msg['response']) {
+        remote.BrowserWindow.getFocusedWindow().webContents.send('search:results', msg['list']);
+    } else {
+        remote.BrowserWindow.getFocusedWindow().webContents.send('search:failed', msg['reasons']);
+    }
+}
+
 module.exports = {
-    upload
+    upload,
+    search
 }

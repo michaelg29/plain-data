@@ -80,3 +80,55 @@ form input:focus {
 form a.a-btn {
     font-size: 20px;
 }
+
+/* ============================= DROPDOWN ================================= */
+.dropdown-btn {
+    border-radius: 0;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    width: auto;
+    height: auto;
+
+    visibility: hidden;
+
+    text-align: center;
+
+    background-color: lightgray;
+
+    padding: 15px;
+    line-height: 200%;
+}
+
+.dropdown-menu a {
+    padding: 10px 25px;
+    
+    display: inline;
+}
+
+.dropdown-show {
+    visibility: visible;
+}
+
+/* ========================================= FILE +++++++++++++++++++++++++++++++++++++++ */
+.file-blurb {
+    padding: 15px;
+    width: 80%;
+    height: auto;
+
+    background-color: lightgray;
+    border-radius: 15px;
+}
+
+.file-blurb-title {
+    font-size: 18px;
+    font-weight: bold;
+}

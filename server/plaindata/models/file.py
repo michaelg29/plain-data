@@ -33,6 +33,47 @@ def writeFile(path, content, isBinary = False):
 		with open("data/files/" + path, 'w') as f:
 			f.write(content)
 
+def search(atts):
+	ret = {
+		"result": True,
+		"reasons": [],
+		"list": []
+	}
+
+	for id, file in localData.files.items():
+		matches = True
+
+		if 'title' in atts:
+			if atts['title'] not in file['title']:
+				matches = False
+				continue
+		if 'author' in atts:
+			if atts['author'] != file['author']:
+				matches = False
+				continue
+		if 'filetype' in atts:
+			if atts['filetype'] != file['filetype']:
+				matches = False
+				continue
+		if 'category' in atts:
+			if atts['category'] != file['category']:
+				matches = False
+				continue
+		if 'tags' in atts:
+			tags = atts['tags'].separate('|')
+			for tag in tags:
+				if tag not in file['tags']:
+					matches = False
+					continue
+
+		if matches:
+			add_item = file
+			add_item['id'] = id
+
+			ret['list'].append(add_item)
+
+	return ret
+
 def download(id):
 	ret = {
 		"result": True,
@@ -60,5 +101,5 @@ def readFile(path):
 	try:
 		with open(f'data/files/{path}', 'rb') as f:
 			return f.read().decode('latin1')
-
-	return None
+	except:
+		pass

@@ -9,7 +9,7 @@ from .data.local import localData
 from .utils import padNumber
 
 from .models.user import validateUser, createUser, setFlag, saveUser
-from .models.file import upload
+from .models.file import upload, download, search
 
 class Types:
     ACCOUNT = "account"
@@ -31,6 +31,7 @@ class FileActions:
     UPLOAD = "upload"
     DOWNLOAD = "download"
     EDIT = "edit"
+    SEARCH = "search"
 
 class Request:
     def __init__(self, body, sender):
@@ -105,7 +106,7 @@ class Request:
                         }
                         self.set('values', user_values)
                     else:
-                        self.setInvalidWithMultipleErrors(results['reasons'])
+                        self.setInvalidWithMultipleErrors('login:failed')
                 elif self.action == AccountActions.CREATE:
                     user_ = {
                         "LastName": self.getClientVal('l'),
@@ -170,7 +171,20 @@ class Request:
                 elif self.action == FileActions.EDIT:
                     pass
                 elif self.action == FileActions.DOWNLOAD:
-                    pass
+                    results = upload(self.getClientVal('fid'))
+
+                    if results['result']:
+                        self.setSuccess()
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
+                elif self.action == FileActions.SEARCH:
+                    results = search(self.get('values'))
+
+                    if results['result']:
+                        self.setSuccess()
+                        self.set('list', results['list'])
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
                 else:
                     self.invalidAction()
             else:

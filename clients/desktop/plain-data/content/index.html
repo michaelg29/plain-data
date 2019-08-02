@@ -19,6 +19,8 @@
             <ul id="properties-list">
                 <li id="footer-property-connection">Connection Status: Offline</li>
                 <li id="footer-property-account">Account Status: Not Logged In</li>
+
+                <li id="loading-animation"></li>
             </ul>
         </div>
     </section>
@@ -35,6 +37,28 @@
         const account = require('./../js_utils/models/account');
         const file = require('./../js_utils/models/file');
         const board = require('./../js_utils/models/board');
+
+        function cancel() {
+            renderer.goto_pg("dashboard");
+        }
+
+        var loadingAnimation;
+
+        ipcRenderer.on('loading-animation:start', () => {
+            var i = 0;
+
+            loadingAnimation = setInterval(function() {
+                i = ++i % 4;
+                jQuery('#loading-animation').html("Loading " + Array(i + 1).join("."));
+            }, 800);
+        });
+
+        ipcRenderer.on('loading-animation:stop', () => {
+            if (loadingAnimation) {
+                clearInterval(loadingAnimation);
+            }
+            jQuery('#loading-animation').html('');
+        });
     </script>
 </body>
 </html>

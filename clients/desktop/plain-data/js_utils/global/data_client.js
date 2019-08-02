@@ -44,6 +44,7 @@ function processMsg(msg) {
 
     if (idMatch || !validated) {
         responseAction(json_parse);
+        window.getFocusedWindow().webContents.send('loading-animation:stop');
     } else {
         console.log("communications error");
     }
@@ -52,6 +53,7 @@ function processMsg(msg) {
 function setResponseAction(action) {
     if (currentReqId === "") {
         responseAction = action;
+        window.getFocusedWindow().webContents.send('loading-animation:start');
         return true;
     }
 

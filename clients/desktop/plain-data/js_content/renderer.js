@@ -19,10 +19,13 @@ if (process.platform !== "darwin") {
 
 const routes = {
     "dashboard": "dashboard.html",
+
     "login": "account/login.html",
     "create_account": "account/create.html",
     "forgot_pwd": "account/forgot.html",
-    "file_upload": "files/upload.html"
+
+    "file_upload": "files/upload.html",
+    "file_search": "files/search.html",
 }
 
 // load html content from page

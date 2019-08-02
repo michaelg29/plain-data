@@ -50,15 +50,14 @@ app.on('ready', function() {
 
 // catch window ready
 ipcMain.on('window:ready', function(e) {
-    DEFAULT_PAGE = "dashboard";
     mainWindow.webContents.send('page:go', DEFAULT_PAGE);
 
-    //client.start();
+    client.start();
 });
 
 // before exiting
 app.on('before-quit', function() {
-    //client.cleanup();
+    client.cleanup();
 })
 
 // on quit

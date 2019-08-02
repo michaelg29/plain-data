@@ -13,8 +13,25 @@
         </div>
 
         <div class="form-item">
-            <label for="category">Category</label>
-            <input type="text" id="category"/>
+            <div class="dropdown-container">
+                <label class="a-btn dropdown-btn" onclick="categoryToggle()">Category</label>
+                <span style="font-style: italic;" id="category"></span>
+
+                <div id="category-list" class="dropdown-menu">
+                    <a onclick="categorySelected('Mathematics')">Mathematics</a>
+                    <a onclick="categorySelected('Physics')">Physics</a>
+                    <a onclick="categorySelected('Chemistry')">Chemistry</a>
+                    <a onclick="categorySelected('Biology')">Biology</a>
+                    <a onclick="categorySelected('Programming')">Programming</a>
+                    <a onclick="categorySelected('Philosophy')">Philosophy</a>
+                    <a onclick="categorySelected('Language')">Language</a>
+                    <a onclick="categorySelected('History')">History</a>
+                    <a onclick="categorySelected('Arts')">Arts</a>
+                    <a onclick="categorySelected('Society')">Society</a>
+                    <a onclick="categorySelected('Government')">Government</a>
+                    <a onclick="categorySelected('Economy')">Economy</a>
+                </div>
+            </div>
         </div>
 
         <div class="form-item">
@@ -38,6 +55,15 @@
 </section>
 
 <script>
+    function categoryToggle() {
+        jQuery('#category-list').toggleClass("dropdown-show");
+    }
+
+    function categorySelected(val) {
+        jQuery('#category').html(val);
+        categoryToggle();
+    }
+
     function upload() {
         var filepath = document.querySelector('#file').innerHTML;
 
@@ -66,9 +92,5 @@
         }, (filePath) => {
             document.querySelector('#file').innerHTML = filePath;
         });
-    }
-
-    function cancel() {
-        renderer.goto_pg("dashboard");
     }
 </script>
