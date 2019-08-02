@@ -10,7 +10,7 @@ from .utils import padNumber
 
 from .models.user import validateUser, createUser, setFlag, saveUser
 from .models.file import upload, download, search
-from .models.board import createBoard, comment, boardSearch
+from .models.board import createBoard, comment, boardSearch, retrieve
 
 class Types:
     ACCOUNT = "account"
@@ -28,6 +28,7 @@ class BoardActions:
     UPDATE = "update"
     COMMENT = "comment"
     SEARCH = "search"
+    RETRIEVE = "retrieve"
 
 class FileActions:
     UPLOAD = "upload"
@@ -177,6 +178,13 @@ class Request:
                     if results['result']:
                         self.setSuccess()
                         self.set('list', results['list'])
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
+                elif self.action == BoardActions.RETRIEVE:
+                    results = retrieve(self.getClientVal('id'))
+
+                    if results['result']:
+                        self.set('values', result['values'])
                     else:
                         self.setInvalidWithMultipleErrors(results['reasons'])
                 else:

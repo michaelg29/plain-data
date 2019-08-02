@@ -95,3 +95,17 @@ def boardSearch(atts):
             ret['list'].append(add_item)
 
     return ret
+
+def retrieve(id):
+    ret = {
+        "result": True,
+        "reasons": []
+    }
+
+    if id in localData.boards:
+        ret['values'] = localData.boards['id']
+    else:
+        ret['result'] = False
+        ret['reasons'].append('id:invalid')
+
+    return ret
