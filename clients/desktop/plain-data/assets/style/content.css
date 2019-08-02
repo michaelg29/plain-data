@@ -3,6 +3,21 @@ a {
     color: var(--secondary-bg-color);
     text-decoration: underline;
     font-weight: lighter;
+    cursor: pointer;
+}
+
+.title {
+    font-size: 72px;
+}
+
+.a-btn {
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    background-color: var(--main-bg-color);
+    border-radius: 50px;
+    padding: 7px;
+    cursor: pointer;
 }
 
 /* ==================================== FORM ================================== */
@@ -60,4 +75,8 @@ form input {
 form input:focus {
     outline: none;
     border-color: var(--secondary-bg-color);
+}
+
+form a.a-btn {
+    font-size: 20px;
 }

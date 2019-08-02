@@ -38,6 +38,10 @@ html, body, section {
     height: calc(100% - 20px);
 }
 
+.content-div-padding {
+    padding: 50px;
+}
+
 #footer-container {
     position: absolute;
     left: 0;
@@ -47,11 +51,6 @@ html, body, section {
     height: 20px;
 
     background-color: var(--secondary-bg-color);
-}
-
-/*==================================TEXT==================================*/
-a {
-    cursor: pointer;
 }
 
 /*=========================GRID DISPLAY=========================*/
