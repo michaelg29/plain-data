@@ -25,7 +25,7 @@ class localData:
         except:
             localData.boards = {}
 
-    def addToManifest(uid, fid, fileAtts):
+    def addFileToManifest(uid, fid, fileAtts):
         localData.files[fid] = fileAtts
 
         uid = str(uid)
@@ -35,14 +35,17 @@ class localData:
         else:
             localData.users[uid] = [ fid ]
 
-    def updateManifest(uid, fileid, fileAtts):
-        pass
-
     def generateFileId():
         if len(localData.files.keys()) == 0:
             return 0
         else:
             return int(list(localData.files.keys())[-1]) + 1
+
+    def generateBoardId():
+        if len(localData.boards.keys()) == 0:
+            return 0
+        else:
+            return int(list(localData.boards.keys())[-1]) + 1
 
     def saveManifest():
         with open('data/files/manifest.json', 'w') as json_file:

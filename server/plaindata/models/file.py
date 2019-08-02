@@ -15,7 +15,7 @@ def upload(atts):
 
 		atts.pop('content')
 		
-		localData.addToManifest(atts['user'], fid, atts)
+		localData.addFileToManifest(atts['user'], fid, atts)
 	except:
 		ret['reasons'].append('file:invalid')
 
