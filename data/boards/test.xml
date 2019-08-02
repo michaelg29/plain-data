@@ -6,7 +6,7 @@
     <content> <!-- to be read as html in client -->
         <div>
             <p>Board content</p>
-            <file src="000000.pdf"/>
+            <div class="file-container" src="0.pdf"></div>
         </div>
     </content>
     <comments>
@@ -15,8 +15,8 @@
             <postdate>2019-07-26</postdate>
             <content> <!-- to be read as html in client -->
                 <div>
-                    <p>Board content</p>
-                    <file src="000000.pdf"/>
+                    <p>Comment content</p>
+                    <div class="file-container" src="0.pdf"></div>
                 </div>
             </content>
         </comment>

@@ -35,6 +35,12 @@ class localData:
         else:
             localData.users[uid] = [ fid ]
 
+    def addBoardToManifest(uid, bid):
+        if uid in localData.boards:
+            localData.boards[uid].append(bid)
+        else:
+            localData.boards[uid] = [ bid ]
+
     def generateFileId():
         if len(localData.files.keys()) == 0:
             return 0
