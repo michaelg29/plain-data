@@ -171,10 +171,11 @@ class Request:
                 elif self.action == FileActions.EDIT:
                     pass
                 elif self.action == FileActions.DOWNLOAD:
-                    results = upload(self.getClientVal('fid'))
+                    results = download(self.getClientVal('fid'))
 
                     if results['result']:
                         self.setSuccess()
+                        self.set('values', results['values'])
                     else:
                         self.setInvalidWithMultipleErrors(results['reasons'])
                 elif self.action == FileActions.SEARCH:

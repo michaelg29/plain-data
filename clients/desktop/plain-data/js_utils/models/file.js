@@ -88,7 +88,48 @@ function searchResponse(msg) {
     }
 }
 
+function download(id, downloadToDrive = false) {
+    let req = {
+        "type": "file",
+        "action": "download",
+        "values": {
+            "fid": id
+        }
+    }
+
+    if (downloadToDrive)
+        client.setResponseAction(downloadToDriveResponse);
+    else
+        client.setResponseAction(downloadContentResponse);
+
+    client.encAndSend(req);
+}
+
+function downloadContentResponse(msg) {
+
+}
+
+function downloadToDriveResponse(msg) {
+    console.log(msg);
+    if (msg['response']) {
+        var filepath = electron.remote.app.getPath('home') + '/downloads/' + msg['values']['filepath'];
+
+        var content = Buffer.from(msg['values']['content'], 'utf8');
+        fs.writeFile(filepath, content, function(err) {
+            if (err) {
+                console.log(err);
+                renderer.alert_message('error', 'Failure', 'File could not be downloaded.');
+            } else {
+                renderer.alert_message('info', 'Success', 'File downloaded to downloads folder!');
+            }
+        });
+    } else {
+        renderer.alert_message('error', 'Failure', 'File could not be downloaded.');
+    }
+}
+
 module.exports = {
     upload,
-    search
+    search,
+    download
 }

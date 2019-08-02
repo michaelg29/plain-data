@@ -92,8 +92,8 @@
         var html = `<h1>Search Results (${results.length} items):</h1><ol>`;
 
         results.map((res, idx, arr) => {
-            var item = `<li class='file-blurb'>
-                <span onclick='open_file(${res['id']})' class="file-blurb-title">${res['title']}</span><br/>
+            var item = `<li class='file-blurb' onclick='open_file(${res['id']})'>
+                <span class="file-blurb-title">${res['title']}</span><br/>
                 Author: <span class='file-blurb-val'>${res['author']}</span>
             </li>`
 
@@ -106,6 +106,6 @@
     }
 
     function open_file(id) {
-        console.log(id);
+        file.download(id, true);
     }
 </script>

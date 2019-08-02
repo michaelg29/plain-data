@@ -135,4 +135,5 @@ form a.a-btn {
 .file-blurb-title {
     font-size: 18px;
     font-weight: bold;
+    cursor: pointer;
 }

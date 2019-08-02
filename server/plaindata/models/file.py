@@ -77,11 +77,16 @@ def search(atts):
 def download(id):
 	ret = {
 		"result": True,
-		"reasons": []
+		"reasons": [],
+		"values": {}
 	}
 
+	id = str(id)
+
+	ret['values']['bytes'] = localData.files[id]['bytes']
+	ret['values']['filepath'] = localData.files[id]['filename'] + '.' + localData.files[id]['filetype']
 	filetype = localData.files[id]['filetype']
-	path = str(id) + '.' + filetype
+	path = id + '.' + filetype
 
 	try:
 		content = readFile(path)
@@ -98,8 +103,16 @@ def download(id):
 	return ret
 
 def readFile(path):
+	content = ""
+	ret = []
+
 	try:
 		with open(f'data/files/{path}', 'rb') as f:
-			return f.read().decode('latin1')
+			content = f.read().decode('latin1')
 	except:
 		pass
+
+	for c in content:
+		ret.append(ord(c))
+
+	return ret
