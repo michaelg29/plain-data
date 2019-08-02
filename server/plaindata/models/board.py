@@ -44,23 +44,54 @@ def comment(atts):
     }
 
     try:
-        with open(f"data/boards/{atts['id']}.json", 'r') as file:
-            board_json = json.load(file)
-            file.close()
+        id = str(atts['id'])
 
-        with open(f"data/boards/{atts['id']}.json", 'w') as file:
-            now = datetime.datetime.now()
+        now = datetime.datetime.now()
 
-            comment_atts = {
-                "uid": atts['uid'],
-                "name": atts['name'],
-                "date": f"{now.month}/{now.day}/{now.year}",
-                "content": atts['content']
-            }
+        comment_atts = {
+            "uid": atts['uid'],
+            "name": atts['name'],
+            "date": f"{now.month}/{now.day}/{now.year}",
+            "content": atts['content']
+        }
 
-            board_json['comments'].append(comment_atts)
-
-            json.dump(board_json, file, indent=4)
+        localData.boards[id]['comments'].append(comment_atts)
     except:
         ret['result'] = False
         ret['reasons'].append('input:invalid')
+
+    return ret
+
+def boardSearch(atts):
+    ret = {
+        "result": True,
+        "reasons": [],
+        "list": []
+    }
+
+    for id, board in localData.boards.items():
+        matches = True
+
+        if 'title' in atts:
+            if atts['title'] not in board['title']:
+                continue
+        if 'creator' in atts:
+            if atts['creator'] != board['creator']:
+                continue
+        if 'category' in atts:
+            if atts['category'] != board['category']:
+                continue
+        if 'tags' in atts:
+            tags = atts['tags'].separate(',')
+            for tag in tags:
+                if tag not in board['tags']:
+                    matches = False
+                    continue
+
+        if matches:
+            add_item = board
+            add_item['id'] = id
+
+            ret['list'].append(add_item)
+
+    return ret

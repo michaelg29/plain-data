@@ -3,8 +3,9 @@ import os
 
 class localData:
     files = {}
-    users = {}
+    file_users = {}
     boards = {}
+    board_users = {}
 
     def loadManifest():
         try:
@@ -15,13 +16,19 @@ class localData:
 
         try:
             with open('data/files/user_manifest.json', 'r') as json_file:
-                localData.users = json.load(json_file)
+                localData.file_users = json.load(json_file)
         except:
-            localData.users = {}
+            localData.file_users = {}
+
+        try:
+            with open('data/boards/manifest.json', 'r') as json_file:
+                localData.boards = json.load(json_file)
+        except:
+            localData.boards = {}
 
         try:
             with open('data/boards/user_manifest.json', 'r') as json_file:
-                localData.boards = json.load(json_file)
+                localData.board_users = json.load(json_file)
         except:
             localData.boards = {}
 
@@ -30,16 +37,20 @@ class localData:
 
         uid = str(uid)
         
-        if uid in localData.users:
-            localData.users[uid].append(fid)
+        if uid in localData.file_users:
+            localData.file_users[uid].append(fid)
         else:
-            localData.users[uid] = [ fid ]
+            localData.file_users[uid] = [ fid ]
 
-    def addBoardToManifest(uid, bid):
-        if uid in localData.boards:
-            localData.boards[uid].append(bid)
+    def addBoardToManifest(uid, bid, boardAtts):
+        localData.boards[bid] = boardAtts
+
+        uid = str(uid)
+
+        if uid in localData.board_users:
+            localData.board_users[uid].append(bid)
         else:
-            localData.boards[uid] = [ bid ]
+            localData.board_users[uid] = [ bid ]
 
     def generateFileId():
         if len(localData.files.keys()) == 0:
@@ -58,7 +69,10 @@ class localData:
             json.dump(localData.files, json_file, indent=4)
 
         with open('data/files/user_manifest.json', 'w') as json_file:
-            json.dump(localData.users, json_file, indent=4)
+            json.dump(localData.file_users, json_file, indent=4)
+
+        with open('data/boards/manifest.json', 'w') as json_file:
+            json.dump(localData.boards, json_file, indent=4)
 
         with open('data/boards/user_manifest.json', 'w') as json_file:
-            json.dump(localData.boards, json_file, indent=4)
+            json.dump(localData.board_users, json_file, indent=4)

@@ -10,7 +10,7 @@ from .utils import padNumber
 
 from .models.user import validateUser, createUser, setFlag, saveUser
 from .models.file import upload, download, search
-from .models.board import createBoard
+from .models.board import createBoard, comment, boardSearch
 
 class Types:
     ACCOUNT = "account"
@@ -27,6 +27,7 @@ class BoardActions:
     CREATE = "create"
     UPDATE = "update"
     COMMENT = "comment"
+    SEARCH = "search"
 
 class FileActions:
     UPLOAD = "upload"
@@ -168,6 +169,14 @@ class Request:
 
                     if results['result']:
                         self.setSuccess()
+                    else:
+                        self.setInvalidWithMultipleErrors(results['reasons'])
+                elif self.action == BoardActions.SEARCH:
+                    results = boardSearch(self.get('values'))
+
+                    if results['result']:
+                        self.setSuccess()
+                        self.set('list', results['list'])
                     else:
                         self.setInvalidWithMultipleErrors(results['reasons'])
                 else:
