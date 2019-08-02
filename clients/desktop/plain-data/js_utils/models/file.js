@@ -24,7 +24,7 @@ function upload(atts) {
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
 
-        values['date'] = mm + '/' + dd + '/' + yyyy;
+        values['date'] = `${mm}/${dd}/${yyyy}`;
     }
 
     // bytes vs text
@@ -82,9 +82,9 @@ function search(atts) {
 
 function searchResponse(msg) {
     if (msg['response']) {
-        remote.BrowserWindow.getFocusedWindow().webContents.send('search:results', msg['list']);
+        renderer.triggerWithData('search:results', msg['list']);
     } else {
-        remote.BrowserWindow.getFocusedWindow().webContents.send('search:failed', msg['reasons']);
+        renderer.triggerWithData('search:failed', msg['reasons']);
     }
 }
 
@@ -106,7 +106,7 @@ function download(id, downloadToDrive = false) {
 }
 
 function downloadContentResponse(msg) {
-
+    // TODO: complete
 }
 
 function downloadToDriveResponse(msg) {

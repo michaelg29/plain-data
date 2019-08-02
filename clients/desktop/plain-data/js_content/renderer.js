@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { ipcRenderer } = electron;
+const { ipcRenderer, remote } = electron;
 const dialog = electron.remote.dialog;
 
 const jQuery = require('jquery');
@@ -26,6 +26,9 @@ const routes = {
 
     "file_upload": "files/upload.html",
     "file_search": "files/search.html",
+
+    "board": "board/board.html",
+    "board_search": "board/search.html",
 }
 
 // load html content from page
@@ -58,6 +61,14 @@ function sendData(message, data) {
 
 function setResponse(trigger, response) {
     ipcRenderer.on(trigger, response);
+}
+
+function trigger(event) {
+    remote.BrowserWindow.getFocusedWindow().webContents.send(event);
+}
+
+function triggerWithData(event, data) {
+    remote.BrowserWindow.getFocusedWindow().webContents.send(event, data);
 }
 
 // ============================== CONFIG VALUES ==========================
@@ -101,5 +112,7 @@ module.exports = {
     alert_message,
     sendAlert,
     sendData,
-    setResponse
+    setResponse,
+    trigger,
+    triggerWithData
 }

@@ -15,7 +15,13 @@ function create(atts) {
 }
 
 function createResponse(msg) {
-
+    if (msg['response']) {
+        renderer.goto_pg('board');
+        renderer.triggerWithData('board:load', msg['id']);
+        renderer.alert_message('info', 'Board created', 'You have successfully created the board!');
+    } else {
+        renderer.triggerWithData('create:failed', msg['reasons']);
+    }
 }
 
 function search(atts) {
@@ -30,7 +36,11 @@ function search(atts) {
 }
 
 function searchResponse(msg) {
-
+    if (msg['response']) {
+        renderer.triggerWithData('search:results', msg['list']);
+    } else {
+        renderer.triggerWithData('search:failed', msg['reasons']);
+    }
 }
 
 function comment(atts) {
@@ -45,6 +55,23 @@ function comment(atts) {
 }
 
 function commentResponse(msg) {
+
+}
+
+function retrieve(id) {
+    let req = {
+        "type": "board",
+        "action": "comment",
+        "values": {
+            "id": id
+        }
+    }
+
+    client.setResponseAction(retrieveResponse);
+    client.encAndSend(req);
+}
+
+function retrieveResponse(msg) {
 
 }
 
