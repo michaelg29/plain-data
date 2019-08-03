@@ -58,7 +58,9 @@ function createAccountResponse(msg) {
         renderer.alert_message('info', 'Created account', 'You have successfully created an account!');
         user_['ID'] = msg['values']['i'];
         remote.getGlobal('user').atts = user_;
+        
         remote.getGlobal('loggedIn').val = true;
+        renderer.updateConfig('account');
     } else {
         renderer.sendData('create:failed', msg['reasons']);
     }
