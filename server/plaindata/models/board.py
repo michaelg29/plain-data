@@ -85,7 +85,7 @@ def boardSearch(atts):
             if atts['category'] != board['category']:
                 continue
         if 'tags' in atts:
-            tags = atts['tags'].separate(',')
+            tags = atts['tags'].split(',')
             for tag in tags:
                 if tag not in board['tags']:
                     matches = False
