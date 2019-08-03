@@ -40,6 +40,22 @@
             jQuery('#content').html(values['content']);
 
             let commentsHtml = "<ul>";
+
+            for (var i = 0; i < values['comments'].length; i++) {
+                let comment = values['comments'][i];
+
+                commentsHtml += `
+                    <li class="blurb" style="list-style-type: none">
+                        <p class="blurb-title">${comment['subject']}</p>
+                        <p style="font-style:italic;" class="text-muted">${comment['name']} on ${comment['date']}</p>
+                        <hr/>
+                        <div class="blurb-content">
+                            ${comment['content']}
+                        </div>
+                    </li>
+                `;
+            }
+
             commentsHtml += "</ul>";
 
             renderer.updateLinks();

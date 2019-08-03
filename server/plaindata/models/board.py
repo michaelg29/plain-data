@@ -47,12 +47,11 @@ def comment(atts):
         id = str(atts['id'])
         ret['id'] = id
 
-        
-
         comment_atts = {
             "uid": atts['uid'],
             "name": atts['name'],
             "date": getDate(),
+            "subject": atts['subject'],
             "content": atts['content']
         }
 
