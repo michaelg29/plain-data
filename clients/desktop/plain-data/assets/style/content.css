@@ -122,8 +122,8 @@ form a.a-btn {
     visibility: visible;
 }
 
-/* ========================================= FILE +++++++++++++++++++++++++++++++++++++++ */
-.file-blurb {
+/* ========================================= BLURB +++++++++++++++++++++++++++++++++++++++ */
+.blurb {
     padding: 15px;
     width: 80%;
     height: auto;
@@ -132,7 +132,7 @@ form a.a-btn {
     border-radius: 15px;
 }
 
-.file-blurb-title {
+.blurb-title {
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
