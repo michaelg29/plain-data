@@ -2,7 +2,7 @@ import pyodbc
 
 # connection
 driver = '{SQL SERVER}'
-server = 'localhost' 
+server = 'localhost\SQLEXPRESS' 
 database = 'plain-data' 
 username = 'plain-data-server' 
 password = 'admin-pd-123'
