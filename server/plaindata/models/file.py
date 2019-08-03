@@ -79,7 +79,9 @@ def download(id):
 
 	id = str(id)
 
-	ret['values']['bytes'] = localData.files[id]['bytes']
+	localData.files[id].pop('content', None)
+
+	ret['values'] = localData.files[id]
 	ret['values']['filepath'] = localData.files[id]['filename'] + '.' + localData.files[id]['filetype']
 	filetype = localData.files[id]['filetype']
 	path = id + '.' + filetype

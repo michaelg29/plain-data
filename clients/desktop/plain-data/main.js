@@ -28,10 +28,10 @@ app.on('ready', function() {
 
     // create window
     mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
+        width: 1500,
+        height: 1000,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
         },
         icon: __dirname + '/assets/cgi-bin/icon.png',
         frame: process.platform === "darwin",

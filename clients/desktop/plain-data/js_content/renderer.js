@@ -1,6 +1,7 @@
 const electron = require('electron');
 const { ipcRenderer, remote } = electron;
 const dialog = electron.remote.dialog;
+const client = remote.getGlobal('client');
 
 const jQuery = require('jquery');
 
@@ -108,6 +109,38 @@ ipcRenderer.send('window:ready');
 
 global.updateConfig = function(value) {
     updateConfig(value);
+}
+
+document.querySelectorAll('a').forEach((item) => {
+    let href = item.getAttribute('href');
+
+    if (href && href.indexOf('/') !== -1) {
+        let type = href.substring(0, href.indexOf('/'));
+        let id = href.substring(href.indexOf('/') + 1);
+
+        switch (type) {
+            case "file":
+                break;
+            case "board":
+                break;
+        }
+    }
+});
+
+function retrieveFile(id, newWindow = true) {
+
+}
+
+function retrieveFileResponse(msg) {
+
+}
+
+function retrieveBoard(id, newWindow = true) {
+
+}
+
+function retrieveBoardResponse(msg) {
+
 }
 
 module.exports = {

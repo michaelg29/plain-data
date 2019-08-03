@@ -65,6 +65,9 @@ class localData:
             return int(list(localData.boards.keys())[-1]) + 1
 
     def saveManifest():
+        for key in localData.files:
+            localData.files[key].pop('content', None)
+
         with open('data/files/manifest.json', 'w') as json_file:
             json.dump(localData.files, json_file, indent=4)
 

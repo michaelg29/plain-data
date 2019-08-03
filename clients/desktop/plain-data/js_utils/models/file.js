@@ -106,26 +106,40 @@ function download(id, downloadToDrive = false) {
 }
 
 function downloadContentResponse(msg) {
-    // TODO: complete
-}
-
-function downloadToDriveResponse(msg) {
-    console.log(msg);
     if (msg['response']) {
-        var filepath = electron.remote.app.getPath('home') + '/downloads/' + msg['values']['filepath'];
+        var filepath = __dirname + '\\tmp\\' + msg['values']['filepath'];
 
-        var content = Buffer.from(msg['values']['content'], 'utf8');
-        fs.writeFile(filepath, content, function(err) {
-            if (err) {
-                console.log(err);
-                renderer.alert_message('error', 'Failure', 'File could not be downloaded.');
-            } else {
-                renderer.alert_message('info', 'Success', 'File downloaded to downloads folder!');
-            }
-        });
+        writeFile(msg['values']['content'], filepath);
+
+        msg['values']['content'] = null;
+        msg['values']['src'] = `file://${filepath}`;
+
+        var child = require('child_process').exec(`${filepath}`);
     } else {
         renderer.alert_message('error', 'Failure', 'File could not be downloaded.');
     }
+}
+
+function downloadToDriveResponse(msg) {
+    if (msg['response']) {
+        var filepath = electron.remote.app.getPath('home') + '/downloads/' + msg['values']['filepath'];
+
+        writeFile(msg['values']['content'], filepath);
+
+        renderer.alert_message('info', 'Success', 'File downloaded to downloads folder!');
+    } else {
+        renderer.alert_message('error', 'Failure', 'File could not be downloaded.');
+    }
+}
+
+function writeFile(content, filepath) {
+    var content_b = Buffer.from(content, 'utf8');
+    fs.writeFile(filepath, content_b, function(err) {
+        if (err) {
+            console.log(err);
+            renderer.alert_message('error', 'Failure', 'File could not be downloaded.');
+        }
+    });
 }
 
 module.exports = {

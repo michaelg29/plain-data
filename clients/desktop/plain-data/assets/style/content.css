@@ -142,3 +142,9 @@ form a.a-btn {
 .board {
     padding: 30px;
 }
+
+.file-frame {
+    margin: 50px;
+    width: calc(100% - 100px);
+    height: 500px;
+}
