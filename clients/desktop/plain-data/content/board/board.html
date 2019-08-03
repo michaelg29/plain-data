@@ -1,3 +1,5 @@
+<a class="a-btn return-home-btn" onclick="cancel()">Return to dashboard</a>
+
 <div class="board">
     <h2 class="board-title" id="title"></h2>
     <p style="font-style: italic;">
@@ -39,6 +41,8 @@
 
             let commentsHtml = "<ul>";
             commentsHtml += "</ul>";
+
+            renderer.updateLinks();
         } catch (error) {
             console.log(error);
         }

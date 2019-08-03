@@ -20,6 +20,13 @@ a {
     cursor: pointer;
 }
 
+.return-home-btn {
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    z-index: 60;
+}
+
 .text-muted {
     opacity: .6;
 }

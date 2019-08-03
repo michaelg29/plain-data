@@ -60,8 +60,6 @@
             jQuery('#loading-animation').html('');
         });
 
-        
-
         ipcRenderer.on('form:preval', function(e, id, value) {
             jQuery(`#${id}`).val(value);
         });

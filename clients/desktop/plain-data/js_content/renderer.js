@@ -1,7 +1,6 @@
 const electron = require('electron');
 const { ipcRenderer, remote } = electron;
 const dialog = electron.remote.dialog;
-const client = remote.getGlobal('client');
 
 const jQuery = require('jquery');
 
@@ -36,6 +35,7 @@ const routes = {
 // load html content from page
 function goto_pg(route) {
     jQuery('#content-container').load(routes[route]);
+    updateLinks();
 }
 
 // get signal from backend js to change page
@@ -111,28 +111,30 @@ global.updateConfig = function(value) {
     updateConfig(value);
 }
 
-document.querySelectorAll('a').forEach((item) => {
-    let href = item.getAttribute('href');
-
-    if (href && href.indexOf('/') !== -1) {
-        let type = href.substring(0, href.indexOf('/'));
-        let id = href.substring(href.indexOf('/') + 1);
-
-        switch (type) {
-            case "file":
-                break;
-            case "board":
-                break;
+function updateLinks() {
+    let links = document.getElementsByTagName('a');
+    
+    for (var i = 0; i < links.length; i++) {
+        item = links[i];
+        let src = item.getAttribute('tar');
+    
+        if (src && src.indexOf('/') !== -1) {
+            let type = src.substring(0, src.indexOf('/'));
+            let id = src.substring(src.indexOf('/') + 1);
+    
+            switch (type) {
+                case "file":
+                    item.setAttribute('onclick', `renderer.retrieveFile(${id}, ${item.hasAttribute('download')})`);
+                case "board":
+                    break;
+            }
         }
     }
-});
-
-function retrieveFile(id, newWindow = true) {
-
 }
 
-function retrieveFileResponse(msg) {
-
+function retrieveFile(id, download = false) {
+    const file = require('./../js_utils/models/file');
+    file.download(id, download);
 }
 
 function retrieveBoard(id, newWindow = true) {
@@ -152,5 +154,8 @@ module.exports = {
     sendData,
     setResponse,
     trigger,
-    triggerWithData
+    triggerWithData,
+    retrieveFile,
+    retrieveBoard,
+    updateLinks
 }
