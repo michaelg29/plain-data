@@ -4,7 +4,7 @@ const path = require('path');
 const { app, BrowserWindow, ipcMain, Menu } = electron;
 app.setName("Plain Data");
 
-// process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production';
 
 // script utils
 const client = require('./js_utils/global/data_client');
@@ -44,7 +44,7 @@ app.on('ready', function() {
     // quit app when closed
     mainWindow.on('closed', () => app.quit());
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
     mainWindow.webContents.send('update:configs_all');
 });
 
