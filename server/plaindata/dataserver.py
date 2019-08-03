@@ -33,6 +33,8 @@ class DataServer(TcpListener):
         localData.loadManifest()
         sql.sql_init()
 
+        print("=" * 30, '\n\n')
+
     def clientConnected(self, client):
         client.validationStage = 0
 
