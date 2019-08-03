@@ -1,11 +1,6 @@
 <section>
-    <form id="upload-form" style="margin-top: 100px">
-        <h1>Upload File</h1>
-
-        <div class="form-item">
-            <label for="author">Author</label>
-            <input type="text" id="author"/>
-        </div>
+    <form id="create-form" style="margin-top: 100px">
+        <h1>Create Board</h1>
 
         <div class="form-item">
             <label for="title">Title</label>
@@ -40,12 +35,12 @@
         </div>
 
         <div class="form-item">
-            <label class="a-btn" onclick="openFileWindow()">Select File</label>
-            <span id="file" style="font-style: italic;"></span>
+            <label for="content">Content</label><br>
+            <textarea id="content"></textarea>
         </div>
 
         <div class="form-item">
-            <a onclick="upload()" class="a-btn">Upload File</a>
+            <a onclick="createBoard()" class="a-btn">Create Board</a>
         </div>
         
         <div class="form-other-options">
@@ -64,33 +59,16 @@
         categoryToggle();
     }
 
-    function upload() {
-        var filepath = document.querySelector('#file').innerHTML;
-
+    function createBoard() {
         let atts = {
-            "author": jQuery('#author').val(),
+            "user": remote.getGlobal('user').atts['ID'],
             "title": jQuery('#title').val(),
-            "category": jQuery('#category').val(),
+            "creator": remote.getGlobal('user').atts['Username'],
+            "category": document.querySelector('#category').innerHTML,
             "tags": jQuery('#tags').val(),
-            "filepath": filepath
+            "content": jQuery('#content').val()
         };
 
-        var dotIdx = filepath.lastIndexOf('.');
-        var slashIdx = filepath.lastIndexOf('\\');
-
-        atts['filename'] = filepath.substring(slashIdx + 1, dotIdx);
-        atts['filetype'] = filepath.substring(dotIdx + 1);
-
-        file.upload(atts);
-    }
-
-    function openFileWindow() {
-        dialog.showOpenDialog({
-            title: "Select a file to upload",
-            defaultPath: electron.remote.app.getPath('home'),
-            properties: [ "openFile" ]
-        }, (filePath) => {
-            document.querySelector('#file').innerHTML = filePath;
-        });
+        board.create(atts);
     }
 </script>

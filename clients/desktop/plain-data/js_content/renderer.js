@@ -29,6 +29,7 @@ const routes = {
 
     "board": "board/board.html",
     "board_search": "board/search.html",
+    "board_create": "board/create.html",
 }
 
 // load html content from page

@@ -23,15 +23,13 @@ def createBoard(atts):
             "comments": []
         }
 
-        json_content = json.dumps(output)
-
-        with open(f'data/boards/{id}.json', 'w') as out_file:
-            out_file.write(json_content)
-
-        localData.addBoardToManifest(output['user'], id)
+        localData.addBoardToManifest(output['user'], id, output)
 
         ret['id'] = id
     except:
+        import traceback, sys
+        exc_info = sys.exc_info()
+        traceback.print_exception(*exc_info)
         ret['result'] = False
         ret['reasons'].append('input:invalid')
 
@@ -58,6 +56,9 @@ def comment(atts):
 
         localData.boards[id]['comments'].append(comment_atts)
     except:
+        import traceback, sys
+        exc_info = sys.exc_info()
+        traceback.print_exception(*exc_info)
         ret['result'] = False
         ret['reasons'].append('input:invalid')
 

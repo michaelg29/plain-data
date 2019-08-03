@@ -1,16 +1,7 @@
 <div class="content-div-padding">
     <h1 class="title">Plain Data</h1>
     <h2 class="text-muted">Information for all</h2>
-    <a onclick="uploadFile()" class="a-btn">Click here to upload a file</a>
-    <a onclick="searchFile()" class="a-btn">Click here to search for a file</a>
+    <a onclick="renderer.goto_pg('file_upload');" class="a-btn">Click here to upload a file</a>
+    <a onclick="renderer.goto_pg('file_search');" class="a-btn">Click here to search for a file</a>
+    <a onclick="renderer.goto_pg('board_create');" class="a-btn">Click here to create a board</a>
 </div>
-
-<script>
-    function uploadFile() {
-        renderer.goto_pg('file_upload');
-    }
-
-    function searchFile() {
-        renderer.goto_pg('file_search');
-    }
-</script>
