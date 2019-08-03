@@ -45,6 +45,7 @@ def comment(atts):
 
     try:
         id = str(atts['id'])
+        ret['id'] = id
 
         now = datetime.datetime.now()
 
@@ -99,7 +100,8 @@ def boardSearch(atts):
 def retrieve(id):
     ret = {
         "result": True,
-        "reasons": []
+        "reasons": [],
+        "id": id
     }
 
     if id in localData.boards:

@@ -55,7 +55,12 @@ function comment(atts) {
 }
 
 function commentResponse(msg) {
-
+    if (msg['response']) {
+        renderer.goto_pg('board');
+        renderer.triggerWithData('board:load', msg['id']);
+    } else {
+        renderer.triggerWithData('comment:failed', msg['reasons']);
+    }
 }
 
 function retrieve(id) {
@@ -72,11 +77,17 @@ function retrieve(id) {
 }
 
 function retrieveResponse(msg) {
-
+    if (msg['response']) {
+        renderer.goto_pg('board');
+        renderer.triggerWithData('board:load', msg['id']);
+    } else {
+        renderer.triggerWithData('comment:failed', msg['reasons']);
+    }
 }
 
 module.exports = {
     create,
     search,
-    comment
+    comment,
+    retrieve
 }
