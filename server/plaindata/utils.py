@@ -1,4 +1,14 @@
+import datetime
+
 def padNumber(n, length):
     ret = str(n)
     ret = '0' * (length - len(ret)) + ret
     return ret
+
+def getDate():
+    now = datetime.datetime.now()
+    month = padNumber(now.month, 2)
+    day = padNumber(now.day, 2)
+    year = padNumber(now.year, 4)
+
+    return f"{month}/{day}/{year}"

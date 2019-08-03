@@ -1,3 +1,17 @@
+<div class="board">
+    <h2 class="board-title" id="title"></h2>
+    <p style="font-style: italic;">
+        Created by <span id="creator"></span> on <span id="date"></span>
+    </p>
+    <hr/>
+    <p>Category: <span id="category"></span></p>
+    <p>Tags: <span id="tags"></span></p>
+    <hr/>
+    <div id="content"></div>
+    <hr/>
+    <h4>Comments:</h4>
+    <div id="comments"></div>
+</div>
 
 <script>
     ipcRenderer.on('board:load', function (e, id) {
@@ -5,6 +19,28 @@
     });
 
     function loadBoard(id) {
+        board.retrieve(id);
+    }
 
+    ipcRenderer.on('board:loaded', function(e, values) {
+        console.log('board:loaded');
+        board_loaded(values);
+    });
+
+    function board_loaded(values) {
+        try {
+            console.log('board_loaded', values);
+            jQuery('#title').html(values['title']);
+            jQuery('#creator').html(values['creator']);
+            jQuery('#date').html(values['date']);
+            jQuery('#category').html(values['category']);
+            jQuery('#tags').html(values['tags'].replace(/,/g, ', '));
+            jQuery('#content').html(values['content']);
+
+            let commentsHtml = "<ul>";
+            commentsHtml += "</ul>";
+        } catch (error) {
+            console.log(error);
+        }
     }
 </script>

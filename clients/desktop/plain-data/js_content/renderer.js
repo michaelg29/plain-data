@@ -69,7 +69,11 @@ function trigger(event) {
 }
 
 function triggerWithData(event, data) {
-    remote.BrowserWindow.getFocusedWindow().webContents.send(event, data);
+    try {
+        remote.BrowserWindow.getFocusedWindow().webContents.send(event, data);
+    } catch (error) {
+        console.log('error');
+    }
 }
 
 // ============================== CONFIG VALUES ==========================

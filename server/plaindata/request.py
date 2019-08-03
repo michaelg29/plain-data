@@ -184,6 +184,7 @@ class Request:
                     results = retrieve(self.getClientVal('id'))
 
                     if results['result']:
+                        self.setSuccess()
                         self.set('values', results['values'])
                     else:
                         self.setInvalidWithMultipleErrors(results['reasons'])

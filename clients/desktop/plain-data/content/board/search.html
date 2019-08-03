@@ -1,0 +1,104 @@
+<form id="search-form" style="margin-top: 100px">
+    <h1>Board Search</h1>
+
+    <div class="form-item">
+        <label for="title">Title</label>
+        <input type="text" id="title"/>
+    </div>
+
+    <div class="form-item">
+        <label for="author">Author</label>
+        <input type="text" id="author"/>
+    </div>
+
+    <div class="form-item">
+        <div class="dropdown-container">
+            <label class="a-btn dropdown-btn" onclick="categoryToggle()">Category</label>
+            <span style="font-style: italic;" id="category"></span>
+
+            <div id="category-list" class="dropdown-menu">
+                <a onclick="categorySelected('Mathematics')">Mathematics</a>
+                <a onclick="categorySelected('Physics')">Physics</a>
+                <a onclick="categorySelected('Chemistry')">Chemistry</a>
+                <a onclick="categorySelected('Biology')">Biology</a>
+                <a onclick="categorySelected('Programming')">Programming</a>
+                <a onclick="categorySelected('Philosophy')">Philosophy</a>
+                <a onclick="categorySelected('Language')">Language</a>
+                <a onclick="categorySelected('History')">History</a>
+                <a onclick="categorySelected('Arts')">Arts</a>
+                <a onclick="categorySelected('Society')">Society</a>
+                <a onclick="categorySelected('Government')">Government</a>
+                <a onclick="categorySelected('Economy')">Economy</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-item">
+        <label for="tags">Tags</label>
+        <input type="text" id="tags" style="width: 300px;" placeholder="Separate each term by a comma"/>
+    </div>
+
+    <div class="form-item">
+        <a onclick="board_search()" class="a-btn">Search</a>
+    </div>
+    
+    <div class="form-other-options">
+        <a onclick="cancel()">Cancel</a>
+    </div>
+</form>
+
+<div id="search-results" style="padding: 30px; margin-top: 50px;">
+    
+</div>
+
+<script>
+    function categoryToggle() {
+        jQuery('#category-list').toggleClass("dropdown-show");
+    }
+
+    function categorySelected(val) {
+        jQuery('#category').html(val);
+        categoryToggle();
+    }
+
+    function board_search() {
+        let atts = {};
+
+        var title = jQuery('#title').val();
+        var author = jQuery('#author').val();
+        var category = jQuery('#category').html();
+        var tags = jQuery('#tags').val().replace(/ /g, '');
+
+        if (title) atts['title'] = title;
+        if (author) atts['creator'] = author;
+        if (category) atts['category'] = category;
+        if (tags) atts['tags'] = tags;
+
+        board.search(atts);
+    }
+
+    ipcRenderer.on('search:results', function (e, results) {
+        search_results(results);
+    });
+
+    function search_results(results) {
+        var html = `<h1>Search Results (${results.length} items):</h1><ol>`;
+
+        results.map((res, idx, arr) => {
+            var item = `<li class='blurb' onclick='open_board(${res['id']})'>
+                <span class="blurb-title">${res['title']}</span><br/>
+                Author: <span class='blurb-val'>${res['creator']}</span>
+            </li>`
+
+            html += item;
+        });
+
+        html += "</ol>"
+
+        jQuery('#search-results').html(html);
+    }
+
+    function open_board(id) {
+        board.retrieve(id);
+    }
+</script>

@@ -137,3 +137,8 @@ form a.a-btn {
     font-weight: bold;
     cursor: pointer;
 }
+
+/* ========================================== BOARD ========================================*/
+.board {
+    padding: 30px;
+}

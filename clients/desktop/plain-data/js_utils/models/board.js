@@ -66,7 +66,7 @@ function commentResponse(msg) {
 function retrieve(id) {
     let req = {
         "type": "board",
-        "action": "comment",
+        "action": "retrieve",
         "values": {
             "id": id
         }
@@ -79,7 +79,8 @@ function retrieve(id) {
 function retrieveResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('board');
-        renderer.triggerWithData('board:load', msg['id']);
+        console.log('retrieveResponse', msg['values']);
+        renderer.triggerWithData('board:loaded', msg['values']);
     } else {
         renderer.triggerWithData('comment:failed', msg['reasons']);
     }

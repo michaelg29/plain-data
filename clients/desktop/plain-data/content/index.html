@@ -59,6 +59,22 @@
             }
             jQuery('#loading-animation').html('');
         });
+
+        document.querySelectorAll('a').forEach((item) => {
+            let href = item.getAttribute('href');
+
+            if (href && href.indexOf('/') !== -1) {
+                let type = href.substring(0, href.indexOf('/'));
+                let id = href.substring(href.indexOf('/') + 1);
+
+                switch (type) {
+                    case "file":
+                        break;
+                    case "board":
+                        break;
+                }
+            }
+        });
     </script>
 </body>
 </html>

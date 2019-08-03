@@ -1,5 +1,6 @@
 from ..data.local import localData
 from .file import writeFile
+from plaindata.utils import getDate
 
 import json
 import datetime
@@ -20,6 +21,7 @@ def createBoard(atts):
             "category": atts['category'],
             "tags": atts['tags'],
             "content": atts['content'],
+            "date": getDate(),
             "comments": []
         }
 
@@ -45,12 +47,12 @@ def comment(atts):
         id = str(atts['id'])
         ret['id'] = id
 
-        now = datetime.datetime.now()
+        
 
         comment_atts = {
             "uid": atts['uid'],
             "name": atts['name'],
-            "date": f"{now.month}/{now.day}/{now.year}",
+            "date": getDate(),
             "content": atts['content']
         }
 
@@ -99,6 +101,8 @@ def boardSearch(atts):
     return ret
 
 def retrieve(id):
+    id = str(id)
+
     ret = {
         "result": True,
         "reasons": [],
@@ -106,7 +110,7 @@ def retrieve(id):
     }
 
     if id in localData.boards:
-        ret['values'] = localData.boards['id']
+        ret['values'] = localData.boards[id]
     else:
         ret['result'] = False
         ret['reasons'].append('id:invalid')
