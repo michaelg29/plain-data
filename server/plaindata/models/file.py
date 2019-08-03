@@ -56,7 +56,7 @@ def search(atts):
 			if atts['category'] != file['category']:
 				continue
 		if 'tags' in atts:
-			tags = atts['tags'].separate(',')
+			tags = atts['tags'].split(',')
 			for tag in tags:
 				if tag not in file['tags']:
 					matches = False
