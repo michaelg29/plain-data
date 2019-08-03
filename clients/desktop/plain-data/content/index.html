@@ -26,11 +26,10 @@
     </section>
 
     <script>
+        const jQuery = require('jquery');
         const electron = require('electron');
         const { ipcRenderer, remote } = electron;
         const dialog = remote.dialog;
-        
-        const jQuery = require('jquery');
 
         const renderer = require('./../js_content/renderer');
 

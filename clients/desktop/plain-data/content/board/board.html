@@ -12,6 +12,24 @@
     <div id="content"></div>
     <hr/>
     <h4>Comments:</h4>
+    <a class="a-btn" onclick="openCommentPrompt()">Post Comment</a>
+    <form class="hidden" id="comment-form">
+        <h1>Post a comment</h1>
+
+        <div class="form-item">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject"/>
+        </div>
+
+        <div class="form-item">
+            <label for="comment-content">Content</label>
+            <textarea id="comment-content" style="width: 75%; height: 250px;">
+        </div>
+
+        <div class="form-item">
+            <a onclick="comment()" class="a-btn">Post Comment</a>
+        </div>
+    </form>
     <div id="comments"></div>
 </div>
 
@@ -58,9 +76,22 @@
 
             commentsHtml += "</ul>";
 
+            document.querySelector('#comments').innerHTML = commentsHtml;
+
             renderer.updateLinks();
         } catch (error) {
             console.log(error);
         }
+    }
+
+    function openCommentPrompt() {
+        document.querySelector('#comment-form').classList.toggle('hidden');
+    }
+
+    function comment() {
+        var subject = document.querySelector('#subject').value;
+        var comment_content = document.querySelector('#comment-content').value;
+
+        board.comment(subject, comment_content);
     }
 </script>

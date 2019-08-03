@@ -92,6 +92,10 @@ form a.a-btn {
     font-size: 20px;
 }
 
+form.hidden {
+    display: none;
+}
+
 /* ============================= DROPDOWN ================================= */
 .dropdown-btn {
     border-radius: 0;

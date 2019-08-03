@@ -47,7 +47,12 @@ function comment(atts) {
     let req = {
         "type": "board",
         "action": "comment",
-        "values": atts
+        "values": {
+            "subject": subject,
+            "content": content,
+            "uid": remote.getGlobal('user').atts['ID'],
+            "name": remote.getGlobal('user').atts['Username']
+        }
     }
 
     client.setResponseAction(commentResponse);

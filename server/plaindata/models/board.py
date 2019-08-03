@@ -25,7 +25,7 @@ def createBoard(atts):
             "comments": []
         }
 
-        localData.addBoardToManifest(output['user'], id, output)
+        localData.addBoardToManifest(output['user'], str(id), output)
 
         ret['id'] = id
     except:
