@@ -27,8 +27,8 @@
 
     <script>
         const electron = require('electron');
-        const { ipcRenderer } = electron;
-        const dialog = electron.remote.dialog;
+        const { ipcRenderer, remote } = electron;
+        const dialog = remote.dialog;
         
         const jQuery = require('jquery');
 
