@@ -110,6 +110,7 @@ def retrieve(id):
 
     if id in localData.boards:
         ret['values'] = localData.boards[id]
+        ret['values']['id'] = id
     else:
         ret['result'] = False
         ret['reasons'].append('id:invalid')

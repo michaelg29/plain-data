@@ -166,7 +166,7 @@ class Request:
                 elif self.action == BoardActions.UPDATE:
                     pass
                 elif self.action == BoardActions.COMMENT:
-                    results = createBoard(self.get('values'))
+                    results = comment(self.get('values'))
 
                     if results['result']:
                         self.setSuccess()

@@ -42,6 +42,8 @@ class localData:
         else:
             localData.file_users[uid] = [ fid ]
 
+        saveManifest()
+
     def addBoardToManifest(uid, bid, boardAtts):
         localData.boards[bid] = boardAtts
 

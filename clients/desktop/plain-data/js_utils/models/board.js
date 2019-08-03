@@ -16,8 +16,7 @@ function create(atts) {
 
 function createResponse(msg) {
     if (msg['response']) {
-        renderer.goto_pg('board');
-        renderer.triggerWithData('board:load', msg['id']);
+        renderer.goto_pg('dashboard');
         renderer.alert_message('info', 'Board created', 'You have successfully created the board!');
     } else {
         renderer.triggerWithData('create:failed', msg['reasons']);
@@ -37,17 +36,18 @@ function search(atts) {
 
 function searchResponse(msg) {
     if (msg['response']) {
-        renderer.triggerWithData('search:results', msg['list']);
+        renderer.triggerWithData('board:search:results', msg['list']);
     } else {
         renderer.triggerWithData('search:failed', msg['reasons']);
     }
 }
 
-function comment(atts) {
+function comment(bid, subject, content) {
     let req = {
         "type": "board",
         "action": "comment",
         "values": {
+            "id": bid,
             "subject": subject,
             "content": content,
             "uid": remote.getGlobal('user').atts['ID'],
@@ -61,8 +61,7 @@ function comment(atts) {
 
 function commentResponse(msg) {
     if (msg['response']) {
-        renderer.goto_pg('board');
-        renderer.triggerWithData('board:load', msg['id']);
+        renderer.goto_pg('dashboard');
     } else {
         renderer.triggerWithData('comment:failed', msg['reasons']);
     }
@@ -84,7 +83,6 @@ function retrieve(id) {
 function retrieveResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('board');
-        console.log('retrieveResponse', msg['values']);
         renderer.triggerWithData('board:loaded', msg['values']);
     } else {
         renderer.triggerWithData('comment:failed', msg['reasons']);

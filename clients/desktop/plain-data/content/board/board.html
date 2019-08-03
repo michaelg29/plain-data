@@ -13,7 +13,7 @@
     <hr/>
     <h4>Comments:</h4>
     <a class="a-btn" onclick="openCommentPrompt()">Post Comment</a>
-    <form class="hidden" id="comment-form">
+    <form class="hidden" id="comment-form" style="margin-top: 50px;">
         <h1>Post a comment</h1>
 
         <div class="form-item">
@@ -23,75 +23,12 @@
 
         <div class="form-item">
             <label for="comment-content">Content</label>
-            <textarea id="comment-content" style="width: 75%; height: 250px;">
+            <textarea id="comment-content" style="width: 75%; height: 250px;"></textarea>
         </div>
 
         <div class="form-item">
-            <a onclick="comment()" class="a-btn">Post Comment</a>
+            <a class="a-btn" id="post-comment-btn">Post Comment</a>
         </div>
     </form>
     <div id="comments"></div>
 </div>
-
-<script>
-    ipcRenderer.on('board:load', function (e, id) {
-        loadBoard(id);
-    });
-
-    function loadBoard(id) {
-        board.retrieve(id);
-    }
-
-    ipcRenderer.on('board:loaded', function(e, values) {
-        console.log('board:loaded');
-        board_loaded(values);
-    });
-
-    function board_loaded(values) {
-        try {
-            console.log('board_loaded', values);
-            jQuery('#title').html(values['title']);
-            jQuery('#creator').html(values['creator']);
-            jQuery('#date').html(values['date']);
-            jQuery('#category').html(values['category']);
-            jQuery('#tags').html(values['tags'].replace(/,/g, ', '));
-            jQuery('#content').html(values['content']);
-
-            let commentsHtml = "<ul>";
-
-            for (var i = 0; i < values['comments'].length; i++) {
-                let comment = values['comments'][i];
-
-                commentsHtml += `
-                    <li class="blurb" style="list-style-type: none">
-                        <p class="blurb-title">${comment['subject']}</p>
-                        <p style="font-style:italic;" class="text-muted">${comment['name']} on ${comment['date']}</p>
-                        <hr/>
-                        <div class="blurb-content">
-                            ${comment['content']}
-                        </div>
-                    </li>
-                `;
-            }
-
-            commentsHtml += "</ul>";
-
-            document.querySelector('#comments').innerHTML = commentsHtml;
-
-            renderer.updateLinks();
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    function openCommentPrompt() {
-        document.querySelector('#comment-form').classList.toggle('hidden');
-    }
-
-    function comment() {
-        var subject = document.querySelector('#subject').value;
-        var comment_content = document.querySelector('#comment-content').value;
-
-        board.comment(subject, comment_content);
-    }
-</script>
