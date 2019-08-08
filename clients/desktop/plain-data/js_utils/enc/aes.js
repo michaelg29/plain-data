@@ -1,5 +1,12 @@
+/*
+    aes symmetric key encryption class
+*/
+
 const aesjs = require('aes-js');
 
+/*
+    generate key of specified byte size
+*/
 function generateKey(size) {
     var key = "";
     var code = '"';
@@ -16,6 +23,9 @@ function generateKey(size) {
     return key;
 }
 
+/*
+    encrypt text with key then call finished function
+*/
 function encrypt(key, text, finished) {
     var aesCtr = new aesjs.ModeOfOperation.ctr(encode(key));
     var textBytes = aesjs.utils.utf8.toBytes(text);
@@ -25,6 +35,9 @@ function encrypt(key, text, finished) {
     finished(encryptedBytes);
 }
 
+/*
+    decrypt cypher with key then call finished function
+*/
 function decrypt(key, encryptedBytes, finished) {
     var aesCtr = new aesjs.ModeOfOperation.ctr(encode(key));
     var decryptedBytes = aesCtr.decrypt(encryptedBytes);
@@ -34,14 +47,21 @@ function decrypt(key, encryptedBytes, finished) {
     finished(decryptedText);
 }
 
+/*
+    decode bytes with utf8 encoding
+*/
 function decode(bytes) {
     return aesjs.utils.utf8.fromBytes(bytes);
 }
 
+/*
+    encode string with utf8 encoding
+*/
 function encode(text) {
     return aesjs.utils.utf8.toBytes(text);
 }
 
+// exports
 module.exports = {
     generateKey,
     encrypt,

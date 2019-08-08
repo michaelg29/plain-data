@@ -1,10 +1,16 @@
+/*
+    data client class
+*/
+
 const rsa = require('../enc/rsa');
 const aes = require('../enc/aes');
 var net = require('net');
 const window = require('electron').BrowserWindow;
 
+// client socket object
 var client;
 
+// metadata variables
 var validated;
 var validationStage;
 var rsa_key;
@@ -16,17 +22,26 @@ var msg_check;
 var responseAction = validateServer;
 var currentReqId = "";
 
+/*
+    send message to server
+*/
 function sendMsg(msg) {
     client.write(msg + "finished");
     response = {};
 }
 
+/*
+    encrypt and send message to server with aes
+*/
 function encAndSend(msg) {
     currentReqId = msg['reqId'] = genReqId();
 
     aes.encrypt(aes_key, JSON.stringify(msg), sendMsg);
 }
 
+/*
+    received message callback
+*/
 function msgReceived(msg) {
     if (validated) {
         aes.decrypt(aes_key, msg, processMsg);
@@ -36,6 +51,9 @@ function msgReceived(msg) {
     processMsg(msg);
 }
 
+/*
+    secondary message processing
+*/
 function processMsg(msg) {
     let json_parse = validated ? JSON.parse(msg) : msg;
 
@@ -50,6 +68,9 @@ function processMsg(msg) {
     }
 }
 
+/*
+    set function for tertiary processing if no current action on queue
+*/
 function setResponseAction(action) {
     if (currentReqId === "") {
         responseAction = action;
@@ -60,6 +81,16 @@ function setResponseAction(action) {
     return false;
 }
 
+/*
+    generate a request id as a random string
+*/
+function genReqId() {
+    return aes.generateKey(24);
+}
+
+/*
+    server validation process
+*/
 function validateServer(msg) {
     try {
         switch (validationStage) {
@@ -97,6 +128,7 @@ function validateServer(msg) {
     }
 }
 
+// send aes key to server
 function sendKey(encrypted) {
     msg_check = aes.generateKey(24);
 
@@ -108,6 +140,7 @@ function sendKey(encrypted) {
     aes.encrypt(aes_key, msg_check, sendValidationMsg);
 }
 
+// send aes encrypted message to server
 function sendValidationMsg(msg) {
     response["enc_msg"] = msg; 
 
@@ -117,8 +150,12 @@ function sendValidationMsg(msg) {
     validationStage++;
 }
 
+/*
+    initialize client connection and start validation
+*/
 function start() {
     client = new net.Socket();
+    // connect
     client.connect(5500, '127.0.0.1', function() {
         msg_check = aes.generateKey(24);
 
@@ -137,6 +174,10 @@ function start() {
         validationStage = 0;
     });
 
+    /*
+        initial message processing
+        eg. decryption, sizing, etc.
+    */
     client.on('data', function(recv) {
         if (validated) {
             var last8 = [];
@@ -164,6 +205,7 @@ function start() {
         }
     });
 
+    // on client close
     client.on('close', function() {
         console.log('disconnected');
         global.online = false;
@@ -172,14 +214,14 @@ function start() {
     });
 }
 
+/*
+    cleanup client
+*/
 function cleanup() {
     client.destroy();
 }
 
-function genReqId() {
-    return aes.generateKey(24);
-}
-
+// exports
 module.exports = {
     sendMsg,
     encAndSend,

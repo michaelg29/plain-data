@@ -1,10 +1,18 @@
+/*
+    account class
+*/
+
 const remote = require('electron').remote;
 const client = remote.getGlobal('client');
 
 const renderer = require('../../js_content/renderer');
 
+// temproary user data storage
 let user_ = {};
 
+/*
+    login with username and password
+*/
 function login(username, password) {
     let req = {
         "type": "account",
@@ -21,6 +29,9 @@ function login(username, password) {
     client.encAndSend(req);
 }
 
+/*
+    parse response from server for login request
+*/
 function loginResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('dashboard');
@@ -36,6 +47,9 @@ function loginResponse(msg) {
     }
 }
 
+/*
+    create account with user data
+*/
 function createAccount(user) {
     let req = {
         "type": "account",
@@ -52,6 +66,9 @@ function createAccount(user) {
     client.encAndSend(req);
 }
 
+/*
+    parse response from server for create account request
+*/
 function createAccountResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('dashboard');
@@ -66,26 +83,42 @@ function createAccountResponse(msg) {
     }
 }
 
+/*
+    forgot password function for user with id and email
+*/
 function forgot(id, email) {
 
 }
 
+/*
+    parse response from server for forgot password request
+*/
 function forgotResponse(msg) {
 
 }
 
+/*
+    save user data function with user data
+*/
 function save(user) {
 
 }
 
+/*
+    parse response from server for save user data request
+*/
 function saveResponse(user) {
 
 }
 
+/*
+    logout of application
+*/
 function logout() {
     global.user = {};
 }
 
+// exports
 module.exports = {
     login,
     createAccount,

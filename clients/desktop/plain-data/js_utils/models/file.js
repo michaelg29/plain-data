@@ -1,9 +1,16 @@
+/*
+    file class
+*/
+
 const remote = require('electron').remote;
 const client = remote.getGlobal('client');
 const fs = require('fs');
 
 const renderer = require('../../js_content/renderer');
 
+/*
+    upload file function with attributes
+*/
 function upload(atts) {
     let values = {
         "user": remote.getGlobal('user').atts['ID'],
@@ -42,24 +49,23 @@ function upload(atts) {
             values['content'] = data;
             values['filesize'] = data.length;
 
-            sendFileToServer(values);
+            let req = {
+                "type": "file",
+                "action": "upload",
+                "values": values
+            };
+        
+            client.setResponseAction(uploadResponse);
+            client.encAndSend(req);
         });
     } catch (error) {
         console.log(error);
     }
 }
 
-function sendFileToServer(values) {
-    let req = {
-        "type": "file",
-        "action": "upload",
-        "values": values
-    };
-
-    client.setResponseAction(uploadResponse);
-    client.encAndSend(req);
-}
-
+/*
+    parse server response for file upload request
+*/
 function uploadResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('dashboard');
@@ -69,6 +75,9 @@ function uploadResponse(msg) {
     }
 }
 
+/*
+    file search function with parameters
+*/
 function search(atts) {
     let req = {
         "type": "file",
@@ -80,6 +89,9 @@ function search(atts) {
     client.encAndSend(req);
 }
 
+/*
+    parse server response for file search request
+*/
 function searchResponse(msg) {
     if (msg['response']) {
         renderer.triggerWithData('search:results', msg['list']);
@@ -88,6 +100,9 @@ function searchResponse(msg) {
     }
 }
 
+/*
+    file download function with specified id
+*/
 function download(id, downloadToDrive = false) {
     let req = {
         "type": "file",
@@ -105,6 +120,9 @@ function download(id, downloadToDrive = false) {
     client.encAndSend(req);
 }
 
+/*
+    parse server response for file download request if only opening file from temproary location
+*/
 function downloadContentResponse(msg) {
     if (msg['response']) {
         var filepath = __dirname + '\\tmp\\' + msg['values']['filepath'];
@@ -120,6 +138,9 @@ function downloadContentResponse(msg) {
     }
 }
 
+/*
+    parse server response for file download request if downloading file to hard drive
+*/
 function downloadToDriveResponse(msg) {
     if (msg['response']) {
         var filepath = electron.remote.app.getPath('home') + '/downloads/' + msg['values']['filepath'];
@@ -132,6 +153,9 @@ function downloadToDriveResponse(msg) {
     }
 }
 
+/*
+    general write file function
+*/
 function writeFile(content, filepath) {
     var content_b = Buffer.from(content, 'utf8');
     fs.writeFile(filepath, content_b, function(err) {
@@ -142,6 +166,7 @@ function writeFile(content, filepath) {
     });
 }
 
+// exports
 module.exports = {
     upload,
     search,

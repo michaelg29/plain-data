@@ -1,5 +1,12 @@
+/*
+    menubar class
+*/
+
 const electron = require("electron");
 
+/*
+    template in array form
+*/
 var template = [
     {
         label: 'Edit',
@@ -80,8 +87,12 @@ if (process.platform === 'darwin') {
     });
 }
 
+/*
+    show about window function
+*/
 function showAboutWindow() {
 
 }
 
+// runtime to link template to application
 electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(template));

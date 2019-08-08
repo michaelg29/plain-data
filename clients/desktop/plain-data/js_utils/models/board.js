@@ -1,8 +1,15 @@
+/*
+    board class
+*/
+
 const remote = require('electron').remote;
 const client = remote.getGlobal('client');
 
 const renderer = require('../../js_content/renderer');
 
+/*
+    create board function with metadata
+*/
 function create(atts) {
     let req = {
         "type": "board",
@@ -14,6 +21,9 @@ function create(atts) {
     client.encAndSend(req);
 }
 
+/*
+    parse server response for create board request
+*/
 function createResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('dashboard');
@@ -23,6 +33,9 @@ function createResponse(msg) {
     }
 }
 
+/*
+    board search function with parameters
+*/
 function search(atts) {
     let req = {
         "type": "board",
@@ -34,6 +47,9 @@ function search(atts) {
     client.encAndSend(req);
 }
 
+/*
+    parse server response for board search request
+*/
 function searchResponse(msg) {
     if (msg['response']) {
         renderer.triggerWithData('board:search:results', msg['list']);
@@ -42,6 +58,9 @@ function searchResponse(msg) {
     }
 }
 
+/*
+    comment function with board id, subject of comment, and comment content
+*/
 function comment(bid, subject, content) {
     let req = {
         "type": "board",
@@ -59,6 +78,9 @@ function comment(bid, subject, content) {
     client.encAndSend(req);
 }
 
+/*
+    parse server response for board comment request
+*/
 function commentResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('dashboard');
@@ -67,6 +89,9 @@ function commentResponse(msg) {
     }
 }
 
+/*
+    retrieve board from server with specified id
+*/
 function retrieve(id) {
     let req = {
         "type": "board",
@@ -80,6 +105,9 @@ function retrieve(id) {
     client.encAndSend(req);
 }
 
+/*
+    parse server response for board retrieval request
+*/
 function retrieveResponse(msg) {
     if (msg['response']) {
         renderer.goto_pg('board');
@@ -89,6 +117,7 @@ function retrieveResponse(msg) {
     }
 }
 
+// exports
 module.exports = {
     create,
     search,

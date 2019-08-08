@@ -1,3 +1,7 @@
+/*
+    renderer process
+*/
+
 const electron = require('electron');
 const { ipcRenderer, remote } = electron;
 const dialog = electron.remote.dialog;
@@ -32,18 +36,26 @@ const routes = {
     "board_create": "board/create.html",
 }
 
-// load html content from page
+/*
+    load html content from page to content container
+*/
 function goto_pg(route) {
     jQuery('#content-container').load(routes[route]);
     updateLinks();
 }
 
-// get signal from backend js to change page
+/*
+    get signal from backend js to change page
+*/
 ipcRenderer.on('page:go', function(e, route) {
     goto_pg(route);
 });
 
 // ============================= ALERT ==============================
+
+/*
+    show alert as dialog
+*/
 function alert_message(type, title, message) {
     dialog.showMessageBox({
         type: type, // none|info|error|question|warning
@@ -53,37 +65,58 @@ function alert_message(type, title, message) {
     });
 }
 
+/*
+    send alert to backend
+*/
 function sendAlert(alert) {
     ipcRenderer.send(alert);
 }
 
+/*
+    send data to backend
+*/
 function sendData(message, data) {
     ipcRenderer.send(message, data);
 }
 
+/*
+    set response to a certain event
+*/
 function setResponse(trigger, response) {
     ipcRenderer.on(trigger, response);
 }
 
+/*
+    trigger an event in frontend
+*/
 function trigger(event) {
     remote.BrowserWindow.getFocusedWindow().webContents.send(event);
 }
 
+/*
+    trigger event with data
+*/
 function triggerWithData(event, data) {
     try {
         remote.BrowserWindow.getFocusedWindow().webContents.send(event, data);
     } catch (error) {
-        console.log('error');
+        console.log(error);
     }
 }
 
 // ============================== CONFIG VALUES ==========================
 
+/*
+    update all existing configurations
+*/
 function updateAllConfigs() {
     updateConfig("connection");
     updateConfig("account");
 }
 
+/*
+    updates configuration value in gui
+*/
 function updateConfig(property) {
     switch (property) {
         case "connection":
@@ -96,21 +129,24 @@ function updateConfig(property) {
     };
 }
 
-ipcRenderer.on('update:config', function(e, config) {
-    updateConfig(config);
-});
+/*
+    callback to configuration update message
+*/
+ipcRenderer.on('update:config', (e, config) => updateConfig(config));
 
+/*
+    callback to update all configurations message
+*/
 ipcRenderer.on('update:configs_all', () => updateAllConfigs());
 
 // ============================== RUNTIME ========================
 
-// on ready
+// set window ready
 ipcRenderer.send('window:ready');
 
-global.updateConfig = function(value) {
-    updateConfig(value);
-}
-
+/*
+    parse links to files and boards in gui
+*/
 function updateLinks() {
     let links = document.getElementsByTagName('a');
     
@@ -132,19 +168,22 @@ function updateLinks() {
     }
 }
 
+/*
+    retrieve file from server
+*/
 function retrieveFile(id, download = false) {
     const file = require('./../js_utils/models/file');
     file.download(id, download);
 }
 
+/*
+    retrieve board from server
+*/
 function retrieveBoard(id, newWindow = true) {
 
 }
 
-function retrieveBoardResponse(msg) {
-
-}
-
+// exports
 module.exports = {
     goto_pg,
     updateConfig,

@@ -6,6 +6,10 @@ app.setName("Plain Data");
 
 process.env.NODE_ENV = 'production';
 
+/*
+    entry point for application
+*/
+
 // script utils
 const client = require('./js_utils/global/data_client');
 global.client = client;
@@ -20,7 +24,10 @@ let mainWindow;
 var online = false;
 var DEFAULT_PAGE = "login";
 
-// wait for app to be ready
+/*
+    wait for app object to be ready
+    then begin gui process
+*/
 app.on('ready', function() {
     global.online = false;
     global.loggedIn = { val: false };
@@ -48,19 +55,25 @@ app.on('ready', function() {
     mainWindow.webContents.send('update:configs_all');
 });
 
-// catch window ready
+/*
+    callback for when window is ready
+*/
 ipcMain.on('window:ready', function(e) {
     mainWindow.webContents.send('page:go', DEFAULT_PAGE);
 
     client.start();
 });
 
-// before exiting
+/*
+    callback for when app is about to quit
+*/
 app.on('before-quit', function() {
     client.cleanup();
 })
 
-// on quit
+/*
+    callback for when app is quitting
+*/
 app.on('quit', function() {
     
 });
