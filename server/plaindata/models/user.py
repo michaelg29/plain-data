@@ -1,7 +1,14 @@
+"""
+    user model class
+"""
+
 from ..data.sql import sql
 
 import string
 
+"""
+    validates user against sql database (login)
+"""
 def validateUser(username, password):
     results = sql.sql_executeReadQuery(f"select ID, LastName, FirstName, Email from dbo.Users where Username = '{username}' and Password = '{password}'")
 
@@ -10,6 +17,9 @@ def validateUser(username, password):
     else:
         return None
 
+"""
+    ensures new data has valid values
+"""
 def validateNewData(user):
     ret = validateData(user)
 
@@ -29,6 +39,9 @@ def validateNewData(user):
 
     return ret
 
+"""
+    ensures data is valid
+"""
 def validateData(user):
     ret = {
         "result": True,
@@ -76,6 +89,9 @@ def validateData(user):
 
     return ret
 
+"""
+    creates user with data
+"""
 def createUser(user):
     ret = validateData(user)
 
@@ -93,6 +109,9 @@ def createUser(user):
 
     return ret
 
+"""
+    saves data for existing user
+"""
 def saveUser(user):
     ret = validateData(user)
 
@@ -106,6 +125,9 @@ def saveUser(user):
 
     return ret
 
+"""
+    adds flag to user
+"""
 def setFlag(id, email, flag):
     ret = {
         "result": True,

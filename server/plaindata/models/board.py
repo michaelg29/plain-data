@@ -1,3 +1,7 @@
+"""
+    board model class
+"""
+
 from ..data.local import localData
 from .file import writeFile
 from plaindata.utils import getDate
@@ -5,6 +9,9 @@ from plaindata.utils import getDate
 import json
 import datetime
 
+"""
+    creates board object and adds metadata to manifest
+"""
 def createBoard(atts):
     ret = {
         "result": True,
@@ -37,6 +44,9 @@ def createBoard(atts):
 
     return ret
 
+"""
+    adds comment to existing board
+"""
 def comment(atts):
     ret = {
         "result": True,
@@ -65,6 +75,9 @@ def comment(atts):
 
     return ret
 
+"""
+    returns search results for parameters
+"""
 def boardSearch(atts):
     ret = {
         "result": True,
@@ -99,6 +112,9 @@ def boardSearch(atts):
 
     return ret
 
+"""
+    returns board metadata with specified id
+"""
 def retrieve(id):
     id = str(id)
 

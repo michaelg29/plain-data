@@ -1,3 +1,7 @@
+"""
+    entry point of application
+"""
+
 from plaindata.dataserver import DataServer
 
 IP_ADDRESS = "127.0.0.1"

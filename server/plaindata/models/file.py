@@ -1,7 +1,14 @@
+"""
+	file model class
+"""
+
 from ..data.local import localData
 
 import json
 
+"""
+	uploads file from client to server
+"""
 def upload(atts):
 	ret = {
 		"result": True,
@@ -22,6 +29,9 @@ def upload(atts):
 
 	return ret
 
+"""
+	writes file to hard drive
+"""
 def writeFile(path, content, isBinary = False):
 	content = content['data']
 	content = ''.join([chr(int(val)) for val in content])
@@ -33,6 +43,9 @@ def writeFile(path, content, isBinary = False):
 		with open("data/files/" + path, 'w') as f:
 			f.write(content)
 
+"""
+	returns file search results for parameters
+"""
 def search(atts):
 	ret = {
 		"result": True,
@@ -70,6 +83,9 @@ def search(atts):
 
 	return ret
 
+"""
+	downloads file from server to client with specified id
+"""
 def download(id):
 	ret = {
 		"result": True,
@@ -100,6 +116,9 @@ def download(id):
 
 	return ret
 
+"""
+	read file from hard drive
+"""
 def readFile(path):
 	content = ""
 	ret = []

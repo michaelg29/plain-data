@@ -1,3 +1,7 @@
+"""
+    data server class
+"""
+
 import sys
 sys.path.append(r"C:\src\business-library\python")
 
@@ -23,30 +27,48 @@ class DataServer(TcpListener):
         self.pubKey = (e, N)
         self.__privKey = (d, N)
 
+    """
+        gets object of type DataClient with socket and address
+    """
     def generateClientObject(self, clientsock, clientaddr):
         return DataClient(clientsock, clientaddr)
 
+    """
+        server started callback
+    """
     def serverStarted(self):
         print("Server started at", self.ipAddr, "on port", self.port)
-        print(r"Type 'stop' to quit")
+        print("Type 'stop' to quit")
 
         localData.loadManifest()
         sql.sql_init()
 
         print("=" * 30, '\n\n')
 
+    """
+        client connected callback
+    """
     def clientConnected(self, client):
         client.validationStage = 0
 
+    """
+        execution process if client is not validated
+    """
     def clientFailedValidation(self, client):
         client.send("Failed validation, disconnecting")
         self._clients.remove(client)
         self.clientDisconnected(client)
         client.sock.close()
 
+    """
+        client disconnected callback
+    """
     def clientDisconnected(self, client):
         print("client disconnected")
 
+    """
+        message received callback
+    """
     def msgReceived(self, client, msg):
         if not client.validated:
             self.validateClient(client, msg)
@@ -56,6 +78,9 @@ class DataServer(TcpListener):
         req = Request(msg, client)
         req.parse()
 
+    """
+        client validation process
+    """
     def validateClient(self, client, msg):
         """ tcp handshake """
         if client.validationStage == 0:
@@ -113,9 +138,15 @@ class DataServer(TcpListener):
                 self.clientFailedValidation(client)
                 return
 
+    """
+        server event callback
+    """
     def serverEvent(self, msg):
         print("SERVER>", msg)
 
+    """
+        command thread callback
+    """
     def cmdThread(self):
         while True:
             cmd = input()

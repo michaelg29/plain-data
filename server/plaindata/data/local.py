@@ -1,3 +1,7 @@
+"""
+    local data connection
+"""
+
 import json
 import os
 
@@ -7,6 +11,9 @@ class localData:
     boards = {}
     board_users = {}
 
+    """
+        loads manifest files with metadata for data on server
+    """
     def loadManifest():
         try:
             with open('data/files/manifest.json', 'r') as json_file:
@@ -32,6 +39,9 @@ class localData:
         except:
             localData.boards = {}
 
+    """
+        adds file metadata to manifest
+    """
     def addFileToManifest(uid, fid, fileAtts):
         localData.files[fid] = fileAtts
 
@@ -44,6 +54,9 @@ class localData:
 
         saveManifest()
 
+    """
+        adds board metadata to manifest
+    """
     def addBoardToManifest(uid, bid, boardAtts):
         localData.boards[bid] = boardAtts
 
@@ -54,18 +67,27 @@ class localData:
         else:
             localData.board_users[uid] = [ bid ]
 
+    """
+        generates unique id for a new file
+    """
     def generateFileId():
         if len(localData.files.keys()) == 0:
             return 0
         else:
             return int(list(localData.files.keys())[-1]) + 1
 
+    """
+        generates unique id for a new board
+    """
     def generateBoardId():
         if len(localData.boards.keys()) == 0:
             return 0
         else:
             return int(list(localData.boards.keys())[-1]) + 1
 
+    """
+        writes metadata to files to be stored on hard drive
+    """
     def saveManifest():
         for key in localData.files:
             localData.files[key].pop('content', None)
