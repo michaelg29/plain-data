@@ -133,7 +133,7 @@ class Request:
             self.action = self.get('action')
 
             # set default values for response
-            self.set('success', True)
+            self.set('response', True)
             self.set("reasons", [])
 
             if self.type == Types.ACCOUNT:

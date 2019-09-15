@@ -4,7 +4,7 @@ const path = require('path');
 const { app, BrowserWindow, ipcMain, Menu } = electron;
 app.setName("Plain Data");
 
-process.env.NODE_ENV = 'production';
+//process.env.NODE_ENV = 'production';
 
 /*
     entry point for application

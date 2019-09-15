@@ -43,7 +43,7 @@ class localData:
         adds file metadata to manifest
     """
     def addFileToManifest(uid, fid, fileAtts):
-        localData.files[fid] = fileAtts
+        localData.files[str(fid)] = fileAtts
 
         uid = str(uid)
         
@@ -52,13 +52,13 @@ class localData:
         else:
             localData.file_users[uid] = [ fid ]
 
-        saveManifest()
+        localData.saveManifest()
 
     """
         adds board metadata to manifest
     """
     def addBoardToManifest(uid, bid, boardAtts):
-        localData.boards[bid] = boardAtts
+        localData.boards[str(bid)] = boardAtts
 
         uid = str(uid)
 
