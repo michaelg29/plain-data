@@ -55,8 +55,8 @@ function upload(atts) {
                 "values": values
             };
         
-            client.setResponseAction(uploadResponse);
-            client.encAndSend(req);
+            var reqId = client.setResponseAction(uploadResponse);
+            client.encAndSend(reqId, req);
         });
     } catch (error) {
         console.log(error);
@@ -85,8 +85,8 @@ function search(atts) {
         "values": atts
     }
 
-    client.setResponseAction(searchResponse);
-    client.encAndSend(req);
+    var reqId = client.setResponseAction(searchResponse);
+    client.encAndSend(reqId, req);
 }
 
 /*
@@ -112,10 +112,13 @@ function download(id, downloadToDrive = false) {
         }
     }
 
-    if (downloadToDrive)
-        client.setResponseAction(downloadToDriveResponse);
-    else
-        client.setResponseAction(downloadContentResponse);
+    if (downloadToDrive) {
+        var reqId = client.setResponseAction(downloadToDriveResponse);
+        client.encAndSend(reqId, req);
+    } else {
+        var reqId = client.setResponseAction(downloadContentResponse);
+        client.encAndSend(reqId, req);
+    }
 
     client.encAndSend(req);
 }

@@ -25,8 +25,8 @@ function login(username, password) {
 
     user_['Username'] = username;
 
-    client.setResponseAction(loginResponse);
-    client.encAndSend(req);
+    var reqId = client.setResponseAction(loginResponse);
+    client.encAndSend(reqId, req);
 }
 
 /*
@@ -62,8 +62,8 @@ function createAccount(user) {
     user_['Username'] = user['u'];
     user_['Email'] = user['e'];
 
-    client.setResponseAction(createAccountResponse);
-    client.encAndSend(req);
+    var reqId = client.setResponseAction(createAccountResponse);
+    client.encAndSend(reqId, req);
 }
 
 /*

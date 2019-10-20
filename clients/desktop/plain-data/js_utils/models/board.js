@@ -17,8 +17,8 @@ function create(atts) {
         "values": atts
     }
 
-    client.setResponseAction(createResponse);
-    client.encAndSend(req);
+    var reqId = client.setResponseAction(createResponse);
+    client.encAndSend(reqId, req);
 }
 
 /*
@@ -43,8 +43,8 @@ function search(atts) {
         "values": atts
     }
 
-    client.setResponseAction(searchResponse);
-    client.encAndSend(req);
+    var reqId = client.setResponseAction(searchResponse);
+    client.encAndSend(reqId, req);
 }
 
 /*
@@ -74,8 +74,8 @@ function comment(bid, subject, content) {
         }
     }
 
-    client.setResponseAction(commentResponse);
-    client.encAndSend(req);
+    var reqId = client.setResponseAction(commentResponse);
+    client.encAndSend(reqId, req);
 }
 
 /*
@@ -101,8 +101,8 @@ function retrieve(id) {
         }
     }
 
-    client.setResponseAction(retrieveResponse);
-    client.encAndSend(req);
+    var reqId = client.setResponseAction(retrieveResponse);
+    client.encAndSend(reqId, req);
 }
 
 /*

@@ -19,8 +19,7 @@ var msg_ = "";
 var msg = [];
 var response;
 var msg_check;
-var responseAction = validateServer;
-var currentReqId = "";
+var queue = {};
 
 /*
     send message to server
@@ -33,8 +32,8 @@ function sendMsg(msg) {
 /*
     encrypt and send message to server with aes
 */
-function encAndSend(msg) {
-    currentReqId = msg['reqId'] = genReqId();
+function encAndSend(reqId, msg) {
+    msg["reqId"] = reqId;
 
     aes.encrypt(aes_key, JSON.stringify(msg), sendMsg);
 }
@@ -56,29 +55,25 @@ function msgReceived(msg) {
 */
 function processMsg(msg) {
     let json_parse = validated ? JSON.parse(msg) : msg;
-
-    var idMatch = json_parse['reqId'] === currentReqId;
-    currentReqId = "";
-
-    if (idMatch || !validated) {
-        responseAction(json_parse);
-        window.getFocusedWindow().webContents.send('loading-animation:stop');
-    } else {
-        console.log("communications error");
+    if (!"reqId" in json_parse) {
+        queue[json_parse["reqId"]](json_parse);
+    } else { // if no request id, server not validated yet
+        validateServer(json_parse);
     }
+
+    window.getFocusedWindow().webContents.send('loading-animation:stop');
 }
 
 /*
-    set function for tertiary processing if no current action on queue
+    add function for tertiary processing to queue
 */
 function setResponseAction(action) {
-    if (currentReqId === "") {
-        responseAction = action;
-        window.getFocusedWindow().webContents.send('loading-animation:start');
-        return true;
-    }
+    var reqId = genReqId();
 
-    return false;
+    queue[reqId] = action;
+    window.getFocusedWindow().webContents.send('loading-animation:start');
+    
+    return reqId;
 }
 
 /*
