@@ -55,7 +55,7 @@ function msgReceived(msg) {
 */
 function processMsg(msg) {
     let json_parse = validated ? JSON.parse(msg) : msg;
-    if (!"reqId" in json_parse) {
+    if (json_parse["reqId"]) {
         queue[json_parse["reqId"]](json_parse);
     } else { // if no request id, server not validated yet
         validateServer(json_parse);
@@ -80,7 +80,13 @@ function setResponseAction(action) {
     generate a request id as a random string
 */
 function genReqId() {
-    return aes.generateKey(24);
+    var ret;
+
+    do {
+        ret = aes.generateKey(24);
+    } while (queue[ret]);
+
+    return ret;
 }
 
 /*
